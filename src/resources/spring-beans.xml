@@ -3,21 +3,26 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-<!-- 	<bean id="ipService" class="ar.com.airdrop.services.IpService"> -->
-<!-- 	</bean> -->
 
-<!-- 	<bean id="pcService" class="ar.com.airdrop.services.PcService"> -->
-<!-- 	</bean> -->
-<!-- 	<bean id="envioService" class="ar.com.airdrop.services.EnvioService"> -->
-	    
-<!-- 	</bean> -->
-<!-- 	<bean id="recepcionService" class="ar.com.airdrop.services.RecepcionService"> -->
-<!-- 	</bean> -->
-<!-- 	<bean id="archivoService" class="ar.com.airdrop.services.ArchivoService"> -->
-<!-- 	</bean> -->
-<bean id="AService" class="services.AService">
+<bean id="persistencia" class="persistencia.Persistencia">
 </bean>
 	
+<bean id="snippletHelper" class="helper.SnippletsHelper">
+
+</bean>
+
+<bean id="vbox" class="javafx.scene.layout.VBox">
+
+</bean>
+
+<bean id="snippletService" class="services.SnippletService">
+<property name="persistencia" ref="persistencia"></property>
+<property name="snippletHelper" ref="snippletHelper"></property>
+<property name="vbox" ref="vbox"></property>
+</bean>
+
+
+
 
 
 
