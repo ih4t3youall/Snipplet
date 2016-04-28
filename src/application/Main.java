@@ -20,7 +20,7 @@ public class Main extends Application {
 			root = (Pane) loader.load();
 			
 			Scene scene = new Scene(root);
-//            primaryStage.setResizable(false);
+            primaryStage.setResizable(false);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {

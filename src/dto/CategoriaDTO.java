@@ -4,30 +4,30 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoriaDTO implements Serializable{
+import domain.Snipplet;
+
+public class CategoriaDTO implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private String nombre;
-	private List<String> snipplets;
+	private List<Snipplet> snipplets;
 	private List<String> tags;
 
-	public void addSnipplet(String snipplet){
-		if(snipplets == null){
-			
-			snipplets = new ArrayList<String>();
-			
+	public void addSnipplet(Snipplet snipplet) {
+		if (snipplets == null) {
+
+			snipplets = new ArrayList<Snipplet>();
+
 		}
-		
+
 		snipplets.add(snipplet);
-	
-		
+
 	}
-	
-	
+
 	public CategoriaDTO(String nombre) {
 		this.nombre = nombre;
 
@@ -41,11 +41,11 @@ public class CategoriaDTO implements Serializable{
 		this.nombre = nombre;
 	}
 
-	public List<String> getSnipplets() {
+	public List<Snipplet> getSnipplets() {
 		return snipplets;
 	}
 
-	public void setSnipplets(List<String> snipplets) {
+	public void setSnipplets(List<Snipplet> snipplets) {
 		this.snipplets = snipplets;
 	}
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import domain.Snipplet;
 import dto.CategoriaDTO;
 import helper.SnippletsHelper;
 import javafx.collections.ObservableList;
@@ -35,30 +36,26 @@ public class SnippletService {
 	}
 
 	public AnchorPane obtenerSnippletsPorCategoria(String categoria) {
-		// TODO implemmentar traer los snipplets por categoria
 		AnchorPane emptyPanel = null;
 		try {
 			emptyPanel = snippletHelper.getEmptyPanel(categoria);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// TODO lleno el panel
 		return emptyPanel;
 
 	}
 	
 	public List<AnchorPane> loadSnippletsPorCategoria(String categoria) {
-		// TODO implemmentar traer los snipplets por categoria
 		AnchorPane populatedPanel = null;
 		
 		List<AnchorPane> panels = new ArrayList<AnchorPane>();
 		try {
-			List<String> snippletByCategory = getSnippletByCategory(categoria);
+			List<Snipplet> snippletByCategory = getSnippletByCategory(categoria);
 			if(snippletByCategory != null){
-			for (String string : snippletByCategory) {
+			for (Snipplet snipplet : snippletByCategory) {
 				populatedPanel = new AnchorPane();
-				populatedPanel = snippletHelper.getPopulatedPanel(categoria,string);
+				populatedPanel = snippletHelper.getPopulatedPanel(categoria,snipplet);
 				panels.add(populatedPanel);
 				
 				
@@ -68,16 +65,14 @@ public class SnippletService {
 				return null;
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// TODO lleno el panel
 		return panels;
 
 	}
 	
 	
-	private List<String> getSnippletByCategory(String categoria){
+	private List<Snipplet> getSnippletByCategory(String categoria){
 		
 		for (CategoriaDTO categoriaDTO : categorias) {
 				if(categoriaDTO.getNombre().equals(categoria)){
@@ -95,7 +90,6 @@ public class SnippletService {
 		try {
 			persistencia.crearCategoria(nuevaCategoria);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("error archivo");
 		}
 
@@ -135,18 +129,16 @@ public class SnippletService {
 	}
 	
 	
-	public void agregarSnipplet(String text, String categoria) {
+	public void agregarSnipplet(Snipplet snipplet, String categoria) {
 		CategoriaDTO categoriaDTO = getCategoriaDTO(categoria);
-		categoriaDTO.addSnipplet(text);
+		categoriaDTO.addSnipplet(snipplet);
 		
 	}
 	
 
 	public void guardarPrueba(String text, String filename) throws Exception {
 		CategoriaDTO categoriaDTO = getCategoriaDTO(filename);
-//		categoriaDTO.addSnipplet(text);
 		if(categoriaDTO.getNombre() == null){
-			//FIXME hace una exception nueva
 			throw  new Exception("nose");
 			
 		}
@@ -157,7 +149,6 @@ public class SnippletService {
 			
 			persistencia.Guardar(categoriaDTO, categoriaDTO.getNombre());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("error al guardar");
 		}
 		
@@ -174,16 +165,16 @@ public class SnippletService {
 	
 	private void errorMultiplesGuardados(CategoriaDTO categoriaDTO) {
 		
-		List<String> strings = new ArrayList<String>();
+		List<Snipplet> snipplets = new ArrayList<Snipplet>();
 		
-		for (String string : categoriaDTO.getSnipplets()) {
+		for (Snipplet snipplet : categoriaDTO.getSnipplets()) {
 			
-			if(!string.equals(null))
-				strings.add(string);
+			if(!snipplet.equals(null))
+				snipplets.add(snipplet);
 			
 		}
 		
-		categoriaDTO.setSnipplets(strings);
+		categoriaDTO.setSnipplets(snipplets);
 		
 		
 	}
@@ -206,10 +197,10 @@ public class SnippletService {
 		
 		CategoriaDTO categoriaDTO = getCategoriaDTO(categoria);
 		
-		List<String> snipplets = categoriaDTO.getSnipplets();
+		List<Snipplet> snipplets = categoriaDTO.getSnipplets();
 		cont =0;
-		for (String snipplet : snipplets) {
-			if(snipplet.equals(text)){
+		for (Snipplet snipplet : snipplets) {
+			if(snipplet.getContenido().equals(text)){
 				break;
 			}
 			cont ++;

@@ -3,6 +3,7 @@ package helper;
 import java.io.IOException;
 
 import controller.PanelController;
+import domain.Snipplet;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 
@@ -29,7 +30,7 @@ public class SnippletsHelper {
 	}
 	
 	
-	public  AnchorPane getPopulatedPanel(String categoria,String snipplet) throws IOException {
+	public  AnchorPane getPopulatedPanel(String categoria,Snipplet snipplet) throws IOException {
 
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/views/panel.fxml"));
@@ -39,7 +40,8 @@ public class SnippletsHelper {
 		PanelController controller =(PanelController) loader.getController();
 		controller.setId("numero"+contador);
 		controller.setCategoria(categoria);
-		controller.getTextArea().setText(snipplet);
+		controller.getTextArea().setText(snipplet.getContenido());
+		controller.getTitulo().setText(snipplet.getTitulo());
 		contador++;
 		
 		return load;
