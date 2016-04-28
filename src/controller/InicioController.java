@@ -18,7 +18,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
@@ -36,33 +35,30 @@ public class InicioController implements Initializable {
 	@FXML
 	private Menu fxmlMenu;
 
-
 	@FXML
 	private ScrollPane scrollPane;
-	
+
 	@FXML
 	private Button botonMas;
-	
+
 	@FXML
 	private Button botonMenos;
-	
+
 	private String id;
-	
-	private VBox vbox=(VBox) SpringContext.getContext().getBean("vbox");
+
+	private VBox vbox = (VBox) SpringContext.getContext().getBean("vbox");
 
 	private SnippletService snippletService = (SnippletService) SpringContext.getContext().getBean("snippletService");
-	
+
 	private SnippletsHelper snippletHelper = (SnippletsHelper) SpringContext.getContext().getBean("snippletHelper");
 
 	protected ObservableList<String> items;
 
-	
-	
-	private void activarButtons(){
+	private void activarButtons() {
 		botonMas.setDisable(false);
 		botonMenos.setDisable(false);
 	}
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -71,35 +67,31 @@ public class InicioController implements Initializable {
 		configure();
 		items = FXCollections.observableArrayList();
 		fxmlListView.setItems(items);
-		
+
 		snippletService.cargarArchivos();
 
 		for (CategoriaDTO categoria : snippletService.getCategorias()) {
-			
+
 			items.add(categoria.getNombre());
 		}
-		
 
 		fxmlListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-					 List<AnchorPane> panels = snippletService.loadSnippletsPorCategoria(newValue);
-					activarButtons();
-					int size = vbox.getChildren().size();
-					
-					for(int i = 0;i< size;i++){
-						vbox.getChildren().remove(0);
+				List<AnchorPane> panels = snippletService.loadSnippletsPorCategoria(newValue);
+				activarButtons();
+				int size = vbox.getChildren().size();
+
+				for (int i = 0; i < size; i++) {
+					vbox.getChildren().remove(0);
+				}
+
+				if (panels != null) {
+
+					for (AnchorPane anchorPane : panels) {
+
+						vbox.getChildren().add(0, anchorPane);
 					}
-					
-					if(panels!=null){
-						
-						for (AnchorPane anchorPane : panels) {
-							
-							vbox.getChildren().add(0,anchorPane);
-						}
-					}
-					
-					
-					
+				}
 
 			}
 		});
@@ -110,68 +102,49 @@ public class InicioController implements Initializable {
 
 		crearMenuItems();
 		crearBotones();
-		
+
 		scrollPane.setContent(vbox);
-		
+
 	}
 
-	private void crearBotones(){
-		
-		
+	private void crearBotones() {
+
 		botonMas.setOnAction(new EventHandler<ActionEvent>() {
-			
+
 			@Override
 			public void handle(ActionEvent event) {
-				AnchorPane root=null;
+				AnchorPane root = null;
 				try {
 					String categoria = fxmlListView.getSelectionModel().getSelectedItem();
 					root = snippletHelper.getEmptyPanel(categoria);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
-				vbox.getChildren().add(0,root);
-				
+
+				vbox.getChildren().add(0, root);
+
 			}
 		});
-		
+
 		botonMenos.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				
+
 				String nombreCategoria = fxmlListView.getSelectionModel().getSelectedItem();
 				items.remove(nombreCategoria);
 				snippletService.deleteCategory(nombreCategoria);
-				
+
 			}
-			
-			
+
 		});
-		
-		
-		
-		
+
 	}
-	
+
 	public void crearMenuItems() {
 
 		MenuItem agregarCategoria = new MenuItem("Agregar Categoria");
-		MenuItem eliminarCategoria = new MenuItem("Eliminar Categoria");
-		MenuItem cienCategorias = new MenuItem("agregar 100 categorias");
 		fxmlMenu.getItems().add(agregarCategoria);
-		fxmlMenu.getItems().add(eliminarCategoria);
-		fxmlMenu.getItems().add(cienCategorias);
-		
-		cienCategorias.setOnAction(new javafx.event.EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-
-				snippletService.recuperarPrueba("categoriaA");
-
-			}
-		});
 
 		agregarCategoria.setOnAction(new javafx.event.EventHandler<ActionEvent>() {
 
@@ -184,19 +157,18 @@ public class InicioController implements Initializable {
 					snippletService.crearNuevoSnipplet(nuevaCategoria);
 					boolean flag = true;
 					for (String string : items) {
-						if(string.equals(nuevaCategoria)){
-							flag =false;
+						if (string.equals(nuevaCategoria)) {
+							flag = false;
 						}
-						
-						
+
 					}
-					if(flag){
-					items.add(nuevaCategoria);
-					}else{
-						
+					if (flag) {
+						items.add(nuevaCategoria);
+					} else {
+
 						JOptionPane.showMessageDialog(null, "el nombre de categoria ya existe!");
 					}
-					
+
 				} else {
 
 					JOptionPane.showMessageDialog(null, "Error: no puede ser vacio.");
@@ -206,26 +178,13 @@ public class InicioController implements Initializable {
 			}
 		});
 
-		eliminarCategoria.setOnAction(new javafx.event.EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-
-				vbox.getChildren().remove(0);
-				
-			}
-		});
-		
 		botonMenos.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				
-				
+
 			}
 		});
-
-		
 
 	}
 
@@ -236,7 +195,5 @@ public class InicioController implements Initializable {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	
 
 }

@@ -5,12 +5,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="294.0" prefWidth="472.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PanelController">
+<AnchorPane prefHeight="339.0" prefWidth="472.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PanelController">
    <children>
-      <Button fx:id="add" layoutX="331.0" layoutY="255.0" mnemonicParsing="false" text="Agregar" />
-      <Button fx:id="guardar" layoutX="399.0" layoutY="255.0" mnemonicParsing="false" text="Guardar" />
-      <TextArea fx:id="textArea" layoutX="14.0" layoutY="14.0" prefHeight="236.0" prefWidth="449.0" />
-      <Button fx:id="delete" layoutX="14.0" layoutY="255.0" mnemonicParsing="false" text="Borrar" />
-      <Button fx:id="copy" layoutX="73.0" layoutY="255.0" mnemonicParsing="false" text="Copy" />
+      <Button fx:id="add" layoutX="329.0" layoutY="300.0" mnemonicParsing="false" text="Agregar" />
+      <Button fx:id="guardar" layoutX="397.0" layoutY="300.0" mnemonicParsing="false" text="Guardar" />
+      <TextArea fx:id="textArea" layoutX="12.0" layoutY="59.0" prefHeight="236.0" prefWidth="449.0" />
+      <Button fx:id="delete" layoutX="12.0" layoutY="300.0" mnemonicParsing="false" text="Borrar" />
+      <Button fx:id="copy" layoutX="71.0" layoutY="300.0" mnemonicParsing="false" text="Copy" />
+      <TextField fx:id="titulo" layoutX="12.0" layoutY="14.0" prefHeight="25.0" prefWidth="449.0" />
    </children>
 </AnchorPane>
