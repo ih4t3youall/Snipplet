@@ -29,7 +29,8 @@ import services.SnippletService;
 
 public class SyncroController implements Initializable {
 
-	String uri = "http://localhost:83/sourcesistemas/index.php/webservices/Snipplet_Webservice/";
+//	String uri = "http://localhost:83/sourcesistemas/index.php/webservices/Snipplet_Webservice/";
+	String uri = "http://www.sourcesistemas.com.ar/index.php/webservices/Snipplet_Webservice/";
 
 	@FXML
 	private Button upload;
@@ -164,7 +165,8 @@ public class SyncroController implements Initializable {
 			throws JsonGenerationException, JsonMappingException, IOException {
 
 		String url = uri + "download/";
-		CategoriaDTO recuperarGuardado = persistencia.recuperarGuardado(filename);
+		CategoriaDTO recuperarGuardado = new CategoriaDTO();
+		recuperarGuardado.setNombre(filename);
 
 		MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 

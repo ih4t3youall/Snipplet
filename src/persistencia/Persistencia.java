@@ -16,14 +16,14 @@ import dto.CategoriaDTO;
 public class Persistencia {
 	
 //  test
-	private String prefix = "C:\\Users\\juan.m.lequerica\\Desktop\\snippletsArchives\\";
+//	private String prefix = "C:\\Users\\juan.m.lequerica\\Desktop\\snippletsArchives\\";
 	
 //	produccion
-//	private String prefix = "C:\\Snipplet\\";
+	private String prefix = "C:\\Snipplet\\";
 	
 	public void crearCategoria(String filename) throws IOException {
 
-		File file = new File(filename);
+		File file = new File(prefix+filename);
 		if (!existeArchivo(filename)) {
 			file.createNewFile();
 		}
