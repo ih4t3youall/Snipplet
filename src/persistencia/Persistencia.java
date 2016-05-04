@@ -23,8 +23,8 @@ public class Persistencia {
 	
 	public void crearCategoria(String filename) throws IOException {
 
-		File file = new File(prefix + filename);
-		if (!existeArchivo(prefix + filename)) {
+		File file = new File(filename);
+		if (!existeArchivo(filename)) {
 			file.createNewFile();
 		}
 	}
@@ -39,13 +39,13 @@ public class Persistencia {
 
 	public boolean existeArchivo(String filename) {
 
-		return new File(filename).exists();
+		return new File(prefix+filename).exists();
 
 	}
 
-	public void Guardar(Object obj, String filename) throws IOException {
+	public void guardar(Object obj, String filename) throws IOException {
 
-		if (existeArchivo(prefix + filename)) {
+		if (existeArchivo(filename)) {
 			FileOutputStream fileOut;
 			ObjectOutputStream obj_out = null;
 			try {
@@ -92,6 +92,38 @@ public class Persistencia {
 		return null;
 
 	}
+	
+	
+	public CategoriaDTO recuperarArchivoGuardado(File file) {
+		if (file.exists()) {
+			ObjectInputStream ois = null;
+			try {
+				ois = new ObjectInputStream(new FileInputStream(file));
+				return (CategoriaDTO) ois.readObject();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+
+			} finally {
+				try {
+					if (ois != null)
+						ois.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+
+	}
+	
+	
+	public File getFileToSend(String filename) {
+		File file = new File(prefix+filename);
+		return file;
+		
+	}
+
 
 	public void getFiles(List<CategoriaDTO> categorias) {
 		File file = new File(prefix);
@@ -107,6 +139,13 @@ public class Persistencia {
 		}
 
 	}
+	
+	
+	public String[] listDirectory(){
+		
+		return new File(prefix).list();
+		
+	}
 
 	public void eliminarYCrearArchivo(String filename) throws IOException {
 		File file = new File(prefix + filename);
@@ -118,4 +157,7 @@ public class Persistencia {
 		File file = new File(prefix + filename);
 		file.delete();
 	}
+
+
+	
 }

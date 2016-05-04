@@ -17,7 +17,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
@@ -25,6 +27,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import services.SnippletService;
 
 public class InicioController implements Initializable {
@@ -43,6 +46,9 @@ public class InicioController implements Initializable {
 
 	@FXML
 	private Button botonMenos;
+	
+	@FXML
+	private Button refresh;
 
 	private String id;
 
@@ -68,12 +74,13 @@ public class InicioController implements Initializable {
 		items = FXCollections.observableArrayList();
 		fxmlListView.setItems(items);
 
-		snippletService.cargarArchivos();
-
-		for (CategoriaDTO categoria : snippletService.getCategorias()) {
-
-			items.add(categoria.getNombre());
-		}
+//		snippletService.cargarArchivos();
+//
+//		for (CategoriaDTO categoria : snippletService.getCategorias()) {
+//
+//			items.add(categoria.getNombre());
+//		}
+		refreshList();
 
 		fxmlListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -97,6 +104,35 @@ public class InicioController implements Initializable {
 		});
 
 	}
+	
+	
+	
+	public void refreshList(){
+		
+		snippletService.cargarArchivos();
+		removerItemsLista();
+		for (CategoriaDTO categoria : snippletService.getCategorias()) {
+
+			items.add(categoria.getNombre());
+		}
+		
+	}
+	
+	
+	private void removerItemsLista() {
+		
+		if(items.size() > 0){
+			int maximo = items.size();
+			for (int i = 0; i < maximo; i++) {
+				items.remove(0);
+			} 
+		
+			
+			
+		}
+		
+		
+	}
 
 	public void configure() {
 
@@ -108,6 +144,22 @@ public class InicioController implements Initializable {
 	}
 
 	private void crearBotones() {
+		
+		refresh.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				
+//				snippletService.cargarArchivos();
+
+				refreshList();
+//				for (CategoriaDTO categoria : snippletService.getCategorias()) {
+//
+//					items.add(categoria.getNombre());
+//				}
+
+			}
+		});
 
 		botonMas.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -144,8 +196,39 @@ public class InicioController implements Initializable {
 	public void crearMenuItems() {
 
 		MenuItem agregarCategoria = new MenuItem("Agregar Categoria");
+		MenuItem guardarEnLaNube = new MenuItem("Administrar nube");
+		
 		fxmlMenu.getItems().add(agregarCategoria);
+		fxmlMenu.getItems().add(guardarEnLaNube);
 
+		
+		guardarEnLaNube.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				
+				FXMLLoader loader = new FXMLLoader();
+				 Stage secondaryStage = new Stage();
+	            loader.setLocation(getClass().getResource("/views/ServerSyncro.fxml"));
+				AnchorPane root;
+				try {
+					root = (AnchorPane) loader.load();
+				
+				
+				Scene scene = new Scene(root);
+				secondaryStage.setResizable(false);
+				secondaryStage.setScene(scene);
+				secondaryStage.show();
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "Error !");
+					
+					e.printStackTrace();
+				}
+				
+			}
+		});
+		
+		
 		agregarCategoria.setOnAction(new javafx.event.EventHandler<ActionEvent>() {
 
 			@Override

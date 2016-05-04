@@ -67,7 +67,7 @@ public class PanelController implements Initializable {
 				if (text != null) {
 
 					try {
-						snnipletService.guardarPrueba(text, categoria);
+						snnipletService.guardarCategoria(text, categoria);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

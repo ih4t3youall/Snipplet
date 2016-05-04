@@ -28,6 +28,7 @@
       <ScrollPane fx:id="scrollPane" layoutX="220.0" layoutY="35.0" prefHeight="347.0" prefWidth="517.0" />
       <Button fx:id="botonMas" disable="true" layoutX="14.0" layoutY="368.0" mnemonicParsing="false" text="+" />
       <Button fx:id="botonMenos" disable="true" layoutX="49.0" layoutY="368.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="24.0" text="-" />
+      <Button fx:id="refresh" layoutX="87.0" layoutY="368.0" mnemonicParsing="false" text="Refrescar" />
       
    </children>
 </Pane>

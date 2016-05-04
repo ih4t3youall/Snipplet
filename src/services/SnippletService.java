@@ -1,5 +1,6 @@
 package services;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,42 +27,36 @@ public class SnippletService {
 	public SnippletService() {
 		categorias = new ArrayList<CategoriaDTO>();
 	}
-	
-	
-	
-	public void firstTime(){
-		
+
+	public void firstTime() {
+
 		persistencia.inicializarCarpetas();
+
+	}
+
+	
+	public String[] listarDirectorio(){
+		
+		return persistencia.listDirectory();
 		
 	}
-
-	public AnchorPane obtenerSnippletsPorCategoria(String categoria) {
-		AnchorPane emptyPanel = null;
-		try {
-			emptyPanel = snippletHelper.getEmptyPanel(categoria);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return emptyPanel;
-
-	}
 	
+
 	public List<AnchorPane> loadSnippletsPorCategoria(String categoria) {
 		AnchorPane populatedPanel = null;
-		
+
 		List<AnchorPane> panels = new ArrayList<AnchorPane>();
 		try {
 			List<Snipplet> snippletByCategory = getSnippletByCategory(categoria);
-			if(snippletByCategory != null){
-			for (Snipplet snipplet : snippletByCategory) {
-				populatedPanel = new AnchorPane();
-				populatedPanel = snippletHelper.getPopulatedPanel(categoria,snipplet);
-				panels.add(populatedPanel);
-				
-				
-			}
-			
-			}else{
+			if (snippletByCategory != null) {
+				for (Snipplet snipplet : snippletByCategory) {
+					populatedPanel = new AnchorPane();
+					populatedPanel = snippletHelper.getPopulatedPanel(categoria, snipplet);
+					panels.add(populatedPanel);
+
+				}
+
+			} else {
 				return null;
 			}
 		} catch (IOException e) {
@@ -70,18 +65,16 @@ public class SnippletService {
 		return panels;
 
 	}
-	
-	
-	private List<Snipplet> getSnippletByCategory(String categoria){
-		
+
+	private List<Snipplet> getSnippletByCategory(String categoria) {
+
 		for (CategoriaDTO categoriaDTO : categorias) {
-				if(categoriaDTO.getNombre().equals(categoria)){
-					return categoriaDTO.getSnipplets();
-				}
+			if (categoriaDTO.getNombre().equals(categoria)) {
+				return categoriaDTO.getSnipplets();
+			}
 		}
 		return null;
-		
-		
+
 	}
 
 	public void crearNuevoSnipplet(String nuevaCategoria) {
@@ -100,115 +93,150 @@ public class SnippletService {
 		persistencia.recuperarGuardado(filename);
 
 	}
-	
-	
+
 	public void cargarArchivos() {
+
 		
+		categorias.clear();
 		persistencia.getFiles(categorias);
-		
+
 	}
 
-	public List<CategoriaDTO> getCategorias(){
-		
+	public List<CategoriaDTO> getCategorias() {
+
 		return categorias;
 	}
-	
-	
-	
-	private CategoriaDTO getCategoriaDTO(String filename){
-		
+
+	private CategoriaDTO getCategoriaDTO(String filename) {
+
 		for (CategoriaDTO categoriaDTO : categorias) {
-			
-			if(categoriaDTO.getNombre().equals(filename)){
+
+			if (categoriaDTO.getNombre().equals(filename)) {
 				return categoriaDTO;
 			}
-			
+
 		}
 		return null;
-		
+
 	}
-	
-	
+
 	public void agregarSnipplet(Snipplet snipplet, String categoria) {
 		CategoriaDTO categoriaDTO = getCategoriaDTO(categoria);
 		categoriaDTO.addSnipplet(snipplet);
-		
-	}
-	
 
-	public void guardarPrueba(String text, String filename) throws Exception {
+	}
+
+	public void guardarCategoria(String text, String filename) throws Exception {
 		CategoriaDTO categoriaDTO = getCategoriaDTO(filename);
-		if(categoriaDTO.getNombre() == null){
-			throw  new Exception("nose");
-			
+		if (categoriaDTO.getNombre() == null) {
+			throw new Exception("nose");
+
 		}
 		try {
 			persistencia.eliminarYCrearArchivo(categoriaDTO.getNombre());
 			errorMultiplesGuardados(categoriaDTO);
-			
-			
-			persistencia.Guardar(categoriaDTO, categoriaDTO.getNombre());
+
+			persistencia.guardar(categoriaDTO, categoriaDTO.getNombre());
 		} catch (IOException e) {
 			System.out.println("error al guardar");
 		}
-		
 
 	}
-	
+
+	private boolean existeEnLista(String titulo, List<Snipplet> lista) {
+
+		for (Snipplet snip : lista) {
+
+			if (titulo.equals(snip.getTitulo()))
+				return true;
+
+		}
+
+		return false;
+
+	}
+
+	public void actualizarCategoria(CategoriaDTO categoriaDTO) {
+
+		boolean exists = persistencia.existeArchivo(categoriaDTO.getNombre());
+
+		if (exists) {
+			CategoriaDTO categoriaVieja = getCategoriaDTO(categoriaDTO.getNombre());
+
+			List<Snipplet> oldSnipplets = categoriaVieja.getSnipplets();
+			List<Snipplet> snipplets = categoriaDTO.getSnipplets();
+
+			for (Snipplet snipplet : oldSnipplets) {
+
+				if (!existeEnLista(snipplet.getTitulo(), snipplets)) {
+					// no existe
+					snipplets.add(snipplet);
+
+				}
+
+			}
+
+		}
+
+		try {
+			persistencia.eliminarYCrearArchivo(categoriaDTO.getNombre());
+			errorMultiplesGuardados(categoriaDTO);
+
+			persistencia.guardar(categoriaDTO, categoriaDTO.getNombre());
+		} catch (IOException e) {
+			System.out.println("error al guardar");
+		}
+
+	}
+
 	public void deleteCategory(String filename) {
 		persistencia.deleteFile(filename);
-		
-	}
-	
-	
-	
-	
-	private void errorMultiplesGuardados(CategoriaDTO categoriaDTO) {
-		
-		List<Snipplet> snipplets = new ArrayList<Snipplet>();
-		
-		for (Snipplet snipplet : categoriaDTO.getSnipplets()) {
-			
-			if(!snipplet.equals(null))
-				snipplets.add(snipplet);
-			
-		}
-		
-		categoriaDTO.setSnipplets(snipplets);
-		
-		
+
 	}
 
-	public void deleteSnippletFromList(String id, String categoria, String text){
-		
-		
+	private void errorMultiplesGuardados(CategoriaDTO categoriaDTO) {
+
+		List<Snipplet> snipplets = new ArrayList<Snipplet>();
+
+		for (Snipplet snipplet : categoriaDTO.getSnipplets()) {
+
+			if (!snipplet.equals(null))
+				snipplets.add(snipplet);
+
+		}
+
+		categoriaDTO.setSnipplets(snipplets);
+
+	}
+
+	public void deleteSnippletFromList(String id, String categoria, String text) {
+
 		ObservableList<Node> children = vbox.getChildren();
-		int cont=0;
+		int cont = 0;
 		for (Node node : children) {
-			
-			if(node.getId().equals(id)){
-				
+
+			if (node.getId().equals(id)) {
+
 				break;
 			}
 			cont++;
 		}
-		
+
 		children.remove(cont);
-		
+
 		CategoriaDTO categoriaDTO = getCategoriaDTO(categoria);
-		
+
 		List<Snipplet> snipplets = categoriaDTO.getSnipplets();
-		cont =0;
+		cont = 0;
 		for (Snipplet snipplet : snipplets) {
-			if(snipplet.getContenido().equals(text)){
+			if (snipplet.getContenido().equals(text)) {
 				break;
 			}
-			cont ++;
+			cont++;
 		}
-		
+
 		categoriaDTO.getSnipplets().remove(cont);
-		
-		
+
 	}
 
 	public Persistencia getPersistencia() {
@@ -235,9 +263,4 @@ public class SnippletService {
 		this.vbox = vbox;
 	}
 
-
-
-
-
-	
 }

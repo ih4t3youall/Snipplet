@@ -17,6 +17,10 @@ public class CategoriaDTO implements Serializable {
 	private List<Snipplet> snipplets;
 	private List<String> tags;
 
+	
+	
+	public CategoriaDTO(){}
+	
 	public void addSnipplet(Snipplet snipplet) {
 		if (snipplets == null) {
 
