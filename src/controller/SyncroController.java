@@ -16,8 +16,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressIndicator;
+import javafx.stage.Stage;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -42,6 +46,8 @@ public class SyncroController implements Initializable {
 	private Button listarServer;
 	@FXML
 	private Button botonArchivo;
+	@FXML
+	private ProgressIndicator cargando;
 
 	@FXML
 	private ListView<String> fxmlListaServer;
@@ -51,10 +57,34 @@ public class SyncroController implements Initializable {
 	private Persistencia persistencia = (Persistencia) SpringContext.getContext().getBean("persistencia");
 
 	private SnippletService snippletService = (SnippletService) SpringContext.getContext().getBean("snippletService");
-
+	
+	private Scene scene;
+	public void setScene(Scene scene) {
+		this.scene=scene;
+		
+	}
+	
+	
+	private void activarCargando(){
+		scene.setCursor(Cursor.WAIT);
+		
+	}
+	
+	
+	private void desactivarCargando(){
+		
+		scene.setCursor(Cursor.DEFAULT);
+		
+		
+	}
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
+		
+		
+		
+		
+		cargando.setVisible(false);
 		items = FXCollections.observableArrayList();
 		fxmlListaServer.setItems(items);
 
@@ -62,7 +92,8 @@ public class SyncroController implements Initializable {
 
 			@Override
 			public void handle(ActionEvent event) {
-
+				scene.setCursor(Cursor.WAIT);
+				
 				String[] listarDirectorio = snippletService.listarDirectorio();
 				removerItemsLista();
 
@@ -73,7 +104,7 @@ public class SyncroController implements Initializable {
 				}
 				download.setDisable(true);
 				upload.setDisable(false);
-
+				desactivarCargando();
 			}
 		});
 
@@ -81,7 +112,7 @@ public class SyncroController implements Initializable {
 
 			@Override
 			public void handle(ActionEvent event) {
-
+				activarCargando();
 				try {
 					String filename = fxmlListaServer.getSelectionModel().getSelectedItem();
 					send_text(filename);
@@ -90,9 +121,7 @@ public class SyncroController implements Initializable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
-				// textArea.setText("");
-				// textArea.setText(send_text);
+				desactivarCargando();
 
 			}
 		});
@@ -101,7 +130,7 @@ public class SyncroController implements Initializable {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-
+				activarCargando();
 				CategoriaDTO fromServer;
 				try {
 
@@ -113,6 +142,7 @@ public class SyncroController implements Initializable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				desactivarCargando();
 
 			}
 		});
@@ -121,7 +151,7 @@ public class SyncroController implements Initializable {
 
 			@Override
 			public void handle(ActionEvent event) {
-
+				activarCargando();
 				String[] listar_server = null;
 				removerItemsLista();
 				try {
@@ -138,7 +168,7 @@ public class SyncroController implements Initializable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
+				desactivarCargando();
 			}
 
 		});
@@ -224,5 +254,7 @@ public class SyncroController implements Initializable {
 		}
 
 	}
+
+
 
 }

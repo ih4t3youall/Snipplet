@@ -46,7 +46,7 @@ public class InicioController implements Initializable {
 
 	@FXML
 	private Button botonMenos;
-	
+
 	@FXML
 	private Button refresh;
 
@@ -63,7 +63,6 @@ public class InicioController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
 		System.out.println("Started up!");
 		snippletService.firstTime();
 		configure();
@@ -94,35 +93,28 @@ public class InicioController implements Initializable {
 		});
 
 	}
-	
-	
-	
-	public void refreshList(){
-		
+
+	public void refreshList() {
+
 		snippletService.cargarArchivos();
 		removerItemsLista();
 		for (CategoriaDTO categoria : snippletService.getCategorias()) {
 
-			
 			items.add(categoria.getNombre());
 		}
-		
+
 	}
-	
-	
+
 	private void removerItemsLista() {
-		
-		if(items.size() > 0){
+
+		if (items.size() > 0) {
 			int maximo = items.size();
 			for (int i = 0; i < maximo; i++) {
 				items.remove(0);
-			} 
-		
-			
-			
+			}
+
 		}
-		
-		
+
 	}
 
 	public void configure() {
@@ -136,12 +128,12 @@ public class InicioController implements Initializable {
 	}
 
 	private void crearBotones() {
-		
+
 		refresh.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				
+
 				refreshList();
 
 			}
@@ -184,68 +176,64 @@ public class InicioController implements Initializable {
 		MenuItem agregarCategoria = new MenuItem("Agregar Categoria");
 		MenuItem guardarEnLaNube = new MenuItem("Administrar nube");
 		MenuItem configuracion = new MenuItem("Configuracion");
-		
+
 		fxmlMenu.getItems().add(agregarCategoria);
 		fxmlMenu.getItems().add(guardarEnLaNube);
 		fxmlMenu.getItems().add(configuracion);
 
-		
 		configuracion.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				
+
 				FXMLLoader loader = new FXMLLoader();
-				 Stage secondaryStage = new Stage();
-	            loader.setLocation(getClass().getResource("/views/Configuracion.fxml"));
+				Stage secondaryStage = new Stage();
+				loader.setLocation(getClass().getResource("/views/Configuracion.fxml"));
 				AnchorPane root;
 				try {
 					root = (AnchorPane) loader.load();
-				
-				
-				Scene scene = new Scene(root);
-				secondaryStage.setResizable(false);
-				secondaryStage.setScene(scene);
-				secondaryStage.show();
+
+					Scene scene = new Scene(root);
+					secondaryStage.setResizable(false);
+					secondaryStage.setScene(scene);
+					secondaryStage.show();
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(null, "Error !");
-					
+
 					e.printStackTrace();
 				}
-				
-				
+
 			}
 		});
-		
-		
-		
+
 		guardarEnLaNube.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				
+
 				FXMLLoader loader = new FXMLLoader();
-				 Stage secondaryStage = new Stage();
-	            loader.setLocation(getClass().getResource("/views/ServerSyncro.fxml"));
+				Stage secondaryStage = new Stage();
+				loader.setLocation(getClass().getResource("/views/ServerSyncro.fxml"));
 				AnchorPane root;
 				try {
 					root = (AnchorPane) loader.load();
-				
-				
-				Scene scene = new Scene(root);
-				secondaryStage.setResizable(false);
-				secondaryStage.setScene(scene);
-				secondaryStage.show();
+					SyncroController controller =(SyncroController) loader.getController();
+					Scene scene = new Scene(root);
+					controller.setScene(scene);
+					
+					secondaryStage.setResizable(false);
+					
+					secondaryStage.setScene(scene);
+					secondaryStage.show();
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(null, "Error !");
-					
+
 					e.printStackTrace();
 				}
-				
+
 			}
 		});
-		
-		
+
 		agregarCategoria.setOnAction(new javafx.event.EventHandler<ActionEvent>() {
 
 			@Override
@@ -287,12 +275,11 @@ public class InicioController implements Initializable {
 		});
 
 	}
-	
+
 	private void activarButtons() {
 		botonMas.setDisable(false);
 		botonMenos.setDisable(false);
 	}
-
 
 	public String getId() {
 		return id;

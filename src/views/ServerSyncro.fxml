@@ -12,5 +12,6 @@
       <Button fx:id="download" disable="true" layoutX="124.0" layoutY="319.0" mnemonicParsing="false" text="download" />
       <Button fx:id="listarServer" layoutX="23.0" layoutY="319.0" mnemonicParsing="false" text="Listar Server" />
       <ListView fx:id="fxmlListaServer" layoutX="21.0" layoutY="25.0" prefHeight="282.0" prefWidth="294.0" />
+      <ProgressIndicator fx:id="cargando" blendMode="RED" cacheHint="ROTATE" layoutX="260.0" layoutY="324.0" />
    </children>
 </AnchorPane>
