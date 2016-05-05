@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javax.swing.JOptionPane;
-
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -25,13 +23,17 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import persistencia.Persistencia;
+import services.ConfigurationService;
 import services.SnippletService;
 
 public class SyncroController implements Initializable {
 
-//	String uri = "http://localhost:83/sourcesistemas/index.php/webservices/Snipplet_Webservice/";
-	String uri = "http://www.sourcesistemas.com.ar/index.php/webservices/Snipplet_Webservice/";
-
+	// String uri =
+	// "http://localhost:83/sourcesistemas/index.php/webservices/Snipplet_Webservice/";
+	// String uri =
+	// "http://www.sourcesistemas.com.ar/index.php/webservices/Snipplet_Webservice/";
+	private ConfigurationService configurationService = (ConfigurationService) SpringContext.getContext()
+			.getBean("configurationService");
 	@FXML
 	private Button upload;
 	@FXML
@@ -40,64 +42,57 @@ public class SyncroController implements Initializable {
 	private Button listarServer;
 	@FXML
 	private Button botonArchivo;
-	
+
 	@FXML
 	private ListView<String> fxmlListaServer;
-	
+
 	protected ObservableList<String> items;
 
 	private Persistencia persistencia = (Persistencia) SpringContext.getContext().getBean("persistencia");
-	
-	private SnippletService snippletService =  (SnippletService) SpringContext.getContext().getBean("snippletService");
-	
+
+	private SnippletService snippletService = (SnippletService) SpringContext.getContext().getBean("snippletService");
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
 		items = FXCollections.observableArrayList();
 		fxmlListaServer.setItems(items);
-		
-		
-		
+
 		botonArchivo.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				
-			String[] listarDirectorio = snippletService.listarDirectorio();
-			removerItemsLista();
-			
-			
-			for (String string : listarDirectorio) {
-				
-				items.add(string);
-				
-			}
-			download.setDisable(true);
-			upload.setDisable(false);
-			
-				
+
+				String[] listarDirectorio = snippletService.listarDirectorio();
+				removerItemsLista();
+
+				for (String string : listarDirectorio) {
+
+					items.add(string);
+
+				}
+				download.setDisable(true);
+				upload.setDisable(false);
+
 			}
 		});
-		
-		
+
 		upload.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
 
-				String send_text = "";
 				try {
 					String filename = fxmlListaServer.getSelectionModel().getSelectedItem();
-					send_text = send_text(filename);
+					send_text(filename);
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
-//				textArea.setText("");
-//				textArea.setText(send_text);
+				// textArea.setText("");
+				// textArea.setText(send_text);
 
 			}
 		});
@@ -109,10 +104,9 @@ public class SyncroController implements Initializable {
 
 				CategoriaDTO fromServer;
 				try {
-					
-					
+
 					String filename = fxmlListaServer.getSelectionModel().getSelectedItem();
-					
+
 					fromServer = getFromServer(filename);
 					snippletService.actualizarCategoria(fromServer);
 				} catch (IOException e) {
@@ -127,44 +121,34 @@ public class SyncroController implements Initializable {
 
 			@Override
 			public void handle(ActionEvent event) {
-				
-				
+
 				String[] listar_server = null;
 				removerItemsLista();
 				try {
-					listar_server=	listar_server();
-					
-				
-				for (String string : listar_server) {
-					items.add(string);
-					
-					
-				}
-				upload.setDisable(true);
-				download.setDisable(false);
-				
+					listar_server = listar_server();
+
+					for (String string : listar_server) {
+						items.add(string);
+
+					}
+					upload.setDisable(true);
+					download.setDisable(false);
+
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			}
 
-			
 		});
-		
-		
-		
-		
-		
+
 	}
 
-	
-	
 	public CategoriaDTO getFromServer(String filename)
 			throws JsonGenerationException, JsonMappingException, IOException {
 
-		String url = uri + "download/";
+		String url = configurationService.getUri() + "index.php/webservices/Snipplet_Webservice/download/";
 		CategoriaDTO recuperarGuardado = new CategoriaDTO();
 		recuperarGuardado.setNombre(filename);
 
@@ -189,7 +173,7 @@ public class SyncroController implements Initializable {
 
 	public String send_text(String filename) throws IOException {
 
-		String url = uri + "guardar_archivo/";
+		String url = configurationService.getUri() + "index.php/webservices/Snipplet_Webservice/guardar_archivo/";
 		CategoriaDTO recuperarGuardado = persistencia.recuperarGuardado(filename);
 
 		MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -205,13 +189,12 @@ public class SyncroController implements Initializable {
 
 		String responseBody = response.body().string();
 
-
 		return responseBody;
 	}
 
 	public String[] listar_server() throws IOException {
 
-		String url = uri + "listar_archivos/";
+		String url = configurationService.getUri() + "index.php/webservices/Snipplet_Webservice/listar_archivos/";
 
 		MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -223,26 +206,23 @@ public class SyncroController implements Initializable {
 		okhttp3.Response response = client.newCall(request).execute();
 
 		String responseBody = response.body().string();
-		
-		 String[] directorios = mapper.readValue(responseBody, String[].class);
-		
+
+		String[] directorios = mapper.readValue(responseBody, String[].class);
+
 		return directorios;
 
 	}
-	
+
 	private void removerItemsLista() {
-		
-		if(items.size() > 0){
+
+		if (items.size() > 0) {
 			int maximo = items.size();
 			for (int i = 0; i < maximo; i++) {
 				items.remove(0);
-			} 
-		
-			
-			
+			}
+
 		}
-		
-		
+
 	}
 
 }

@@ -15,11 +15,17 @@
 
 </bean>
 
+<bean id="configurationService" class="services.ConfigurationService">
+<property name="persistencia" ref="persistencia"></property>
+</bean>
+
 <bean id="snippletService" class="services.SnippletService">
 <property name="persistencia" ref="persistencia"></property>
 <property name="snippletHelper" ref="snippletHelper"></property>
 <property name="vbox" ref="vbox"></property>
+<property name="configurationService" ref="configurationService"></property>
 </bean>
+
 
 
 

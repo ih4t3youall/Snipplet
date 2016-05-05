@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import domain.Snipplet;
 import dto.CategoriaDTO;
 import helper.SnippletsHelper;
@@ -21,6 +23,8 @@ public class SnippletService {
 
 	private SnippletsHelper snippletHelper;
 
+	private ConfigurationService configurationService;
+
 	private VBox vbox;
 
 	public SnippletService() {
@@ -29,17 +33,35 @@ public class SnippletService {
 
 	public void firstTime() {
 
-		persistencia.inicializarCarpetas();
+		try {
+			persistencia.inicializarCarpetas();
+		} catch (IOException e) {
+			// TODO Matar la aplicacion
+			e.printStackTrace();
+		}
 
 	}
 
-	
-	public String[] listarDirectorio(){
+	public void config() {
+		try {
+			
+			configurationService.cargarConfiguracion();
+			
+
+		} catch (ClassNotFoundException | IOException e) {
+			JOptionPane.showMessageDialog(null, "Error al cargar la configuracion.");
 		
+			
+			e.printStackTrace();
+		}
+
+	}
+
+	public String[] listarDirectorio() {
+
 		return persistencia.listDirectory();
-		
+
 	}
-	
 
 	public List<AnchorPane> loadSnippletsPorCategoria(String categoria) {
 		AnchorPane populatedPanel = null;
@@ -95,7 +117,6 @@ public class SnippletService {
 
 	public void cargarArchivos() {
 
-		
 		categorias.clear();
 		persistencia.getFiles(categorias);
 
@@ -260,6 +281,14 @@ public class SnippletService {
 
 	public void setVbox(VBox vbox) {
 		this.vbox = vbox;
+	}
+
+	public ConfigurationService getConfigurationService() {
+		return configurationService;
+	}
+
+	public void setConfigurationService(ConfigurationService configurationService) {
+		this.configurationService = configurationService;
 	}
 
 }

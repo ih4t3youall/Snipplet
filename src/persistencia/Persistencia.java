@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import domain.FileConfiguration;
 import dto.CategoriaDTO;
 
 public class Persistencia {
@@ -20,7 +21,15 @@ public class Persistencia {
 	
 //	produccion
 	private String prefix = "C:\\Snipplet\\";
+//	private String uri = "http://www.sourcesistemas.com.ar/index.php/webservices/Snipplet_Webservice/";
+	private String uri = "http://www.sourcesistemas.com.ar/index.php/";
 	
+	
+	
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+
 	public void crearCategoria(String filename) throws IOException {
 
 		File file = new File(prefix+filename);
@@ -29,13 +38,59 @@ public class Persistencia {
 		}
 	}
 
-	public void inicializarCarpetas() {
+	public void inicializarCarpetas() throws IOException {
 
 		boolean exists = new File("C:\\Snipplet").exists();
-		if (!exists)
+		if (!exists){
 			new File("C:\\Snipplet").mkdir();
+			new File("C:\\SnippletConfig").mkdir();
+			File file = new File("C:\\SnippletConfig\\snipletConf");
+			
+			file.createNewFile();
+			FileOutputStream in = new FileOutputStream(file);
+			ObjectOutputStream writer = new ObjectOutputStream(in);
+			FileConfiguration conf = new FileConfiguration();
+			conf.setPrefix(prefix);
+			conf.setUri(uri);
+			writer.writeObject(conf);
+			writer.close();
+			in.close();
+			
+		}
+		
+		
 
 	}
+	
+	
+	public void saveNewConfiguration(FileConfiguration fileConfiguration) throws IOException {
+		File file = new File(fileConfiguration.getConfigurationPrefix()+"\\snipletConf");
+		file.delete();
+		file.createNewFile();
+		FileOutputStream os = new FileOutputStream(file);
+		ObjectOutputStream oos = new ObjectOutputStream(os);
+		oos.writeObject(fileConfiguration);
+		oos.close();
+		os.close();
+		
+		
+	}
+
+	
+	public FileConfiguration getConfig() throws IOException, ClassNotFoundException {
+		File file = new File("C:\\SnippletConfig\\snipletConf");
+		FileInputStream in = new FileInputStream(file);
+		@SuppressWarnings("resource")
+		ObjectInputStream ois = new ObjectInputStream(in);
+		FileConfiguration fileConfiguration = (FileConfiguration)ois.readObject();
+		prefix = fileConfiguration.getPrefix();
+		return fileConfiguration;
+		
+	}
+	
+	
+	
+	
 
 	public boolean existeArchivo(String filename) {
 
@@ -157,6 +212,9 @@ public class Persistencia {
 		File file = new File(prefix + filename);
 		file.delete();
 	}
+
+
+
 
 
 	

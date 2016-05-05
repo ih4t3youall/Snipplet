@@ -60,26 +60,16 @@ public class InicioController implements Initializable {
 
 	protected ObservableList<String> items;
 
-	private void activarButtons() {
-		botonMas.setDisable(false);
-		botonMenos.setDisable(false);
-	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		System.out.println("hasta aca anda");
+		System.out.println("Started up!");
 		snippletService.firstTime();
 		configure();
 		items = FXCollections.observableArrayList();
 		fxmlListView.setItems(items);
 
-//		snippletService.cargarArchivos();
-//
-//		for (CategoriaDTO categoria : snippletService.getCategorias()) {
-//
-//			items.add(categoria.getNombre());
-//		}
 		refreshList();
 
 		fxmlListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -113,6 +103,7 @@ public class InicioController implements Initializable {
 		removerItemsLista();
 		for (CategoriaDTO categoria : snippletService.getCategorias()) {
 
+			
 			items.add(categoria.getNombre());
 		}
 		
@@ -138,6 +129,7 @@ public class InicioController implements Initializable {
 
 		crearMenuItems();
 		crearBotones();
+		snippletService.config();
 
 		scrollPane.setContent(vbox);
 
@@ -150,13 +142,7 @@ public class InicioController implements Initializable {
 			@Override
 			public void handle(ActionEvent event) {
 				
-//				snippletService.cargarArchivos();
-
 				refreshList();
-//				for (CategoriaDTO categoria : snippletService.getCategorias()) {
-//
-//					items.add(categoria.getNombre());
-//				}
 
 			}
 		});
@@ -197,10 +183,41 @@ public class InicioController implements Initializable {
 
 		MenuItem agregarCategoria = new MenuItem("Agregar Categoria");
 		MenuItem guardarEnLaNube = new MenuItem("Administrar nube");
+		MenuItem configuracion = new MenuItem("Configuracion");
 		
 		fxmlMenu.getItems().add(agregarCategoria);
 		fxmlMenu.getItems().add(guardarEnLaNube);
+		fxmlMenu.getItems().add(configuracion);
 
+		
+		configuracion.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				
+				FXMLLoader loader = new FXMLLoader();
+				 Stage secondaryStage = new Stage();
+	            loader.setLocation(getClass().getResource("/views/Configuracion.fxml"));
+				AnchorPane root;
+				try {
+					root = (AnchorPane) loader.load();
+				
+				
+				Scene scene = new Scene(root);
+				secondaryStage.setResizable(false);
+				secondaryStage.setScene(scene);
+				secondaryStage.show();
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "Error !");
+					
+					e.printStackTrace();
+				}
+				
+				
+			}
+		});
+		
+		
 		
 		guardarEnLaNube.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -270,6 +287,12 @@ public class InicioController implements Initializable {
 		});
 
 	}
+	
+	private void activarButtons() {
+		botonMas.setDisable(false);
+		botonMenos.setDisable(false);
+	}
+
 
 	public String getId() {
 		return id;
