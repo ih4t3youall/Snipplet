@@ -49,6 +49,9 @@ public class InicioController implements Initializable {
 
 	@FXML
 	private Button refresh;
+	
+	@FXML
+	private Menu fxmlEdit;
 
 	private String id;
 
@@ -176,10 +179,41 @@ public class InicioController implements Initializable {
 		MenuItem agregarCategoria = new MenuItem("Agregar Categoria");
 		MenuItem guardarEnLaNube = new MenuItem("Administrar nube");
 		MenuItem configuracion = new MenuItem("Configuracion");
-
+		
 		fxmlMenu.getItems().add(agregarCategoria);
 		fxmlMenu.getItems().add(guardarEnLaNube);
 		fxmlMenu.getItems().add(configuracion);
+		
+		
+		MenuItem sourcesistemas = new MenuItem("sourcesistemas");
+		fxmlEdit.getItems().add(sourcesistemas);
+		
+		
+		sourcesistemas.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				
+				FXMLLoader loader = new FXMLLoader();
+				Stage secondaryStage = new Stage();
+				loader.setLocation(getClass().getResource("/views/ConsultasSource.fxml"));
+				AnchorPane root;
+				try {
+					root = (AnchorPane) loader.load();
+
+					Scene scene = new Scene(root);
+					secondaryStage.setResizable(false);
+					secondaryStage.setScene(scene);
+					secondaryStage.show();
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "Error !");
+
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		
 
 		configuracion.setOnAction(new EventHandler<ActionEvent>() {
 

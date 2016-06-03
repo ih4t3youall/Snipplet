@@ -12,27 +12,30 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import domain.FileConfiguration;
+import domain.UserConfiguration;
 import dto.CategoriaDTO;
 
 public class Persistencia {
-	
-//  test
-//	private String prefix = "C:\\Users\\juan.m.lequerica\\Desktop\\snippletsArchives\\";
-	
-//	produccion
+
+	// test
+	// private String prefix =
+	// "C:\\Users\\juan.m.lequerica\\Desktop\\snippletsArchives\\";
+
+	// produccion
 	private String prefix = "C:\\Snipplet\\";
-//	private String uri = "http://www.sourcesistemas.com.ar/index.php/webservices/Snipplet_Webservice/";
+	// private String uri =
+	// "http://www.sourcesistemas.com.ar/index.php/webservices/Snipplet_Webservice/";
 	private String uri = "http://www.sourcesistemas.com.ar/index.php/";
-	
-	
-	
+	private String snipletFileConfiguration = "C:\\SnippletConfig\\snipletConf";
+	private String userConfigurationFix = "C:\\SnippletConfig\\userConfiguration";
+
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
 	}
 
 	public void crearCategoria(String filename) throws IOException {
 
-		File file = new File(prefix+filename);
+		File file = new File(prefix + filename);
 		if (!existeArchivo(filename)) {
 			file.createNewFile();
 		}
@@ -41,12 +44,14 @@ public class Persistencia {
 	public void inicializarCarpetas() throws IOException {
 
 		boolean exists = new File("C:\\Snipplet").exists();
-		if (!exists){
+		if (!exists) {
 			new File("C:\\Snipplet").mkdir();
 			new File("C:\\SnippletConfig").mkdir();
-			File file = new File("C:\\SnippletConfig\\snipletConf");
-			
+			File file = new File(snipletFileConfiguration);
+
 			file.createNewFile();
+			new File(userConfigurationFix).createNewFile();
+			
 			FileOutputStream in = new FileOutputStream(file);
 			ObjectOutputStream writer = new ObjectOutputStream(in);
 			FileConfiguration conf = new FileConfiguration();
@@ -55,48 +60,72 @@ public class Persistencia {
 			writer.writeObject(conf);
 			writer.close();
 			in.close();
-			
+
 		}
-		
-		
 
 	}
-	
-	
+
 	public void saveNewConfiguration(FileConfiguration fileConfiguration) throws IOException {
-		File file = new File(fileConfiguration.getConfigurationPrefix()+"\\snipletConf");
+		
+		File file = new File(snipletFileConfiguration);
+		if(file.exists());
 		file.delete();
+		
 		file.createNewFile();
 		FileOutputStream os = new FileOutputStream(file);
 		ObjectOutputStream oos = new ObjectOutputStream(os);
 		oos.writeObject(fileConfiguration);
 		oos.close();
 		os.close();
-		
-		
+
 	}
 
-	
-	public FileConfiguration getConfig() throws IOException, ClassNotFoundException {
+	public void saveNewUserConfiguration(UserConfiguration userConfiguration) throws IOException {
+		 File file = new File(userConfigurationFix);
+		 
+		 if(file.exists());
+		 file.delete();
+		 
+		 file.createNewFile();
+		 FileOutputStream os = new FileOutputStream(file);
+		 ObjectOutputStream oos = new ObjectOutputStream(os);
+		 oos.writeObject(userConfiguration);
+		 oos.close();
+		 os.close();
+	}
+
+	public FileConfiguration getFileConfig() throws IOException, ClassNotFoundException {
 		File file = new File("C:\\SnippletConfig\\snipletConf");
 		FileInputStream in = new FileInputStream(file);
 		@SuppressWarnings("resource")
 		ObjectInputStream ois = new ObjectInputStream(in);
-		FileConfiguration fileConfiguration = (FileConfiguration)ois.readObject();
+		FileConfiguration fileConfiguration = (FileConfiguration) ois.readObject();
 		prefix = fileConfiguration.getPrefix();
 		return fileConfiguration;
-		
+
 	}
 	
 	
-	
-	
+
+	public UserConfiguration getUserConfig() throws IOException, ClassNotFoundException {
+		File file = new File(userConfigurationFix);
+		FileInputStream in = new FileInputStream(file);
+		@SuppressWarnings("resource")
+		ObjectInputStream ois = new ObjectInputStream(in);
+		UserConfiguration userConfiguration = (UserConfiguration) ois.readObject();
+		return userConfiguration;
+		
+		
+	}
+
 
 	public boolean existeArchivo(String filename) {
 
-		return new File(prefix+filename).exists();
+		return new File(prefix + filename).exists();
 
 	}
+	
+	
 
 	public void guardar(Object obj, String filename) throws IOException {
 
@@ -147,8 +176,7 @@ public class Persistencia {
 		return null;
 
 	}
-	
-	
+
 	public CategoriaDTO recuperarArchivoGuardado(File file) {
 		if (file.exists()) {
 			ObjectInputStream ois = null;
@@ -171,17 +199,17 @@ public class Persistencia {
 		return null;
 
 	}
-	
-	
-	public File getFileToSend(String filename) {
-		File file = new File(prefix+filename);
-		return file;
-		
-	}
 
+	public File getFileToSend(String filename) {
+		File file = new File(prefix + filename);
+		return file;
+
+	}
 
 	public void getFiles(List<CategoriaDTO> categorias) {
 		File file = new File(prefix);
+		
+		
 		String[] list = file.list();
 
 		for (String string : list) {
@@ -194,12 +222,11 @@ public class Persistencia {
 		}
 
 	}
-	
-	
-	public String[] listDirectory(){
-		
+
+	public String[] listDirectory() {
+
 		return new File(prefix).list();
-		
+
 	}
 
 	public void eliminarYCrearArchivo(String filename) throws IOException {
@@ -213,9 +240,4 @@ public class Persistencia {
 		file.delete();
 	}
 
-
-
-
-
-	
 }

@@ -52,6 +52,7 @@ final HBox hbs [] = new HBox [values.length];
     }
         
     public static void main(String[] args) {
-        launch(args);
+//        launch(args);
+    	new Inicio();
     }
 }
