@@ -1,12 +1,19 @@
 package services;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import domain.Snipplet;
+import domain.SourceObject;
 import dto.CategoriaDTO;
 import helper.SnippletsHelper;
 import javafx.collections.ObservableList;
@@ -145,6 +152,77 @@ public class SnippletService {
 		categoriaDTO.addSnipplet(snipplet);
 
 	}
+	
+	
+	
+	public void guardarCopiaSourceSistemas(SourceObject[] fromServer) {
+
+		File file = new File(configurationService.getFileConfiguration().getConfigurationPrefix()+"mensajesSource");
+		
+		
+			
+			if (file.exists()) {
+				ObjectInputStream ois = null;
+				try {
+					ois = new ObjectInputStream(new FileInputStream(file));
+					SourceObject[] readObject =(SourceObject[]) ois.readObject();
+					
+					
+					
+					Object[] eliminarRepetidos = snippletHelper.eliminarRepetidos(readObject,fromServer);
+					
+					persistencia.guardar(eliminarRepetidos, "mensajesSource");
+					
+
+
+				} catch (Exception e) {
+					e.printStackTrace();
+
+				} finally {
+					try {
+						if (ois != null)
+							ois.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}else {
+				
+				
+				try {
+					file.createNewFile();
+					
+					FileOutputStream fileOut;
+					ObjectOutputStream obj_out = null;
+					try {
+						fileOut = new FileOutputStream(file);
+						obj_out = new ObjectOutputStream(fileOut);
+						obj_out.writeObject(fromServer);
+
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} finally {
+						obj_out.close();
+
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			
+			
+		
+		
+		
+		
+		
+	}
+
+	
 
 	public void guardarCategoria(String text, String filename) throws Exception {
 		CategoriaDTO categoriaDTO = getCategoriaDTO(filename);
@@ -290,5 +368,6 @@ public class SnippletService {
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}
+
 
 }

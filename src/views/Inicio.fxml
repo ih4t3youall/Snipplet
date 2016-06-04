@@ -13,7 +13,7 @@
         <menus>
           <Menu fx:id="fxmlMenu" mnemonicParsing="false" text="File">
           </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
+          <Menu fx:id="fxmlEdit" mnemonicParsing="false" text="Edit">
             <items>
               <MenuItem mnemonicParsing="false" text="Delete" />
             </items>

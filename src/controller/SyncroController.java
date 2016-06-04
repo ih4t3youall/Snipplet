@@ -4,12 +4,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javax.swing.JOptionPane;
+
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import context.SpringContext;
+import domain.UserConfiguration;
 import dto.CategoriaDTO;
+import dto.SendDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -181,12 +185,18 @@ public class SyncroController implements Initializable {
 		String url = configurationService.getUri() + "index.php/webservices/Snipplet_Webservice/download/";
 		CategoriaDTO recuperarGuardado = new CategoriaDTO();
 		recuperarGuardado.setNombre(filename);
-
+		
+		SendDTO send = new SendDTO();
+		UserConfiguration userConfiguration = configurationService.getUserConfiguration();
+		send.setUsername(userConfiguration.getUsername());
+		send.setCategoriaDTO(recuperarGuardado);
+		
+		
 		MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
 		OkHttpClient client = new OkHttpClient();
 		ObjectMapper mapper = new ObjectMapper();
-		String writeValueAsString = mapper.writeValueAsString(recuperarGuardado);
+		String writeValueAsString = mapper.writeValueAsString(send);
 		System.out.println(writeValueAsString);
 		RequestBody body = RequestBody.create(JSON, writeValueAsString);
 
@@ -205,12 +215,19 @@ public class SyncroController implements Initializable {
 
 		String url = configurationService.getUri() + "index.php/webservices/Snipplet_Webservice/guardar_archivo/";
 		CategoriaDTO recuperarGuardado = persistencia.recuperarGuardado(filename);
-
+		UserConfiguration userConfiguration = configurationService.getUserConfiguration();
+		SendDTO send  = new SendDTO();
+		send.setUsername(userConfiguration.getUsername());
+		send.setPassword(userConfiguration.getPassword());
+		send.setCategoriaDTO(recuperarGuardado);
+		
 		MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+		
+		if(recuperarGuardado != null){
 		OkHttpClient client = new OkHttpClient();
 		ObjectMapper mapper = new ObjectMapper();
-		String writeValueAsString = mapper.writeValueAsString(recuperarGuardado);
+		String writeValueAsString = mapper.writeValueAsString(send);
 		System.out.println(writeValueAsString);
 		RequestBody body = RequestBody.create(JSON, writeValueAsString);
 
@@ -218,8 +235,13 @@ public class SyncroController implements Initializable {
 		okhttp3.Response response = client.newCall(request).execute();
 
 		String responseBody = response.body().string();
-
+		JOptionPane.showMessageDialog(null, responseBody);
 		return responseBody;
+		}else {
+			JOptionPane.showMessageDialog(null, "Este archivo no contiene snipplets!");
+			return "";
+			
+		}
 	}
 
 	public String[] listar_server() throws IOException {
@@ -227,10 +249,15 @@ public class SyncroController implements Initializable {
 		String url = configurationService.getUri() + "index.php/webservices/Snipplet_Webservice/listar_archivos/";
 
 		MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
+		
+		UserConfiguration userConfiguration = configurationService.getUserConfiguration();
+		SendDTO send  = new SendDTO();
+		send.setUsername(userConfiguration.getUsername());
+		send.setPassword(userConfiguration.getPassword());
+		
 		OkHttpClient client = new OkHttpClient();
 		ObjectMapper mapper = new ObjectMapper();
-		RequestBody body = RequestBody.create(JSON, "");
+		RequestBody body = RequestBody.create(JSON,mapper.writeValueAsString(send));
 
 		Request request = new Request.Builder().url(url).post(body).build();
 		okhttp3.Response response = client.newCall(request).execute();

@@ -9,12 +9,15 @@
    <children>
       <Label layoutX="33.0" layoutY="37.0" text="Host" />
       <Label layoutX="33.0" layoutY="123.0" text="prefix" />
-      <Label layoutX="33.0" layoutY="220.0" text="Label" />
+      <Label layoutX="33.0" layoutY="220.0" text="Nombre" />
+      <Label layoutX="33.0" layoutY="320.0" text="Password" />
       <TextField fx:id="textHost" layoutX="33.0" layoutY="75.0" prefHeight="25.0" prefWidth="327.0" />
       <TextField fx:id="prefixText" layoutX="33.0" layoutY="159.0" prefHeight="25.0" prefWidth="327.0" />
-      <TextField layoutX="33.0" layoutY="259.0" prefHeight="25.0" prefWidth="327.0" />
-      <Button fx:id="buttonHost" layoutX="393.0" layoutY="75.0" mnemonicParsing="false" text="actualizar" />
-      <Button fx:id="prefixButton" layoutX="393.0" layoutY="159.0" mnemonicParsing="false" text="actualizar" />
-      <Button layoutX="393.0" layoutY="259.0" mnemonicParsing="false" text="Button" />
+      <TextField fx:id="textoNombre" layoutX="33.0" layoutY="259.0" prefHeight="25.0" prefWidth="327.0" />
+      <TextField fx:id="textoPassword" layoutX="33.0" layoutY="359.0" prefHeight="25.0" prefWidth="327.0" />
+      <Button fx:id="buttonHost" layoutX="393.0" layoutY="75.0" mnemonicParsing="false" text="Actualizar" />
+      <Button fx:id="prefixButton" layoutX="393.0" layoutY="159.0" mnemonicParsing="false" text="Actualizar" />
+      <Button fx:id="botonNombre" layoutX="393.0" layoutY="259.0" mnemonicParsing="false" text="Actualizar" />
+      
    </children>
 </AnchorPane>

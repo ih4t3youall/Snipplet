@@ -30,16 +30,11 @@ public class Main extends Application {
 	
 	public static void main(String[] args) {
 		launch(args);
-
-		
-//	    String sSistemaOperativo = System.getProperty("user.home");
-//		System.out.println(sSistemaOperativo);
-//		int indexOf = sSistemaOperativo.toLowerCase().indexOf("linux");
-//		System.out.println(indexOf);
-		
-		
-		
 		
 	}
+	
+	
+	
+	
 
 }

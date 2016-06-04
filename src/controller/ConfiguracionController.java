@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
 
 import context.SpringContext;
+import domain.UserConfiguration;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -29,6 +30,15 @@ public class ConfiguracionController implements Initializable {
 	@FXML
 	private Button prefixButton;
 	
+	@FXML
+	private Button botonNombre;
+	
+	@FXML
+	private TextField textoNombre;
+	
+	@FXML
+	private TextField textoPassword;
+	
 	private ConfigurationService configurationService = (ConfigurationService) SpringContext.getContext().getBean("configurationService");
 	
 	@Override
@@ -47,11 +57,40 @@ public class ConfiguracionController implements Initializable {
 	private void cargarCampos() {
 		textHost.setText(configurationService.getUri());
 		prefixText.setText(configurationService.getPrefix());
+		UserConfiguration userConfiguration = configurationService.getUserConfiguration();
 		
+		if(userConfiguration != null){
+			String username = userConfiguration.getUsername();
+			String password = userConfiguration.getPassword();
+			textoNombre.setText(username);
+			textoPassword.setText(password);
+			
+		}
 		
 	}
 
 	private void inicializarBotones() {
+		
+		
+		botonNombre.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				
+				
+				String nombre = textoNombre.getText();
+				UserConfiguration userConfiguration = new UserConfiguration();
+				userConfiguration.setUsername(nombre);
+				userConfiguration.setPassword(textoPassword.getText());
+				configurationService.cambiarUsuario(userConfiguration);
+				JOptionPane.showMessageDialog(null, "Actualizado con exito.");
+				
+				
+				
+				
+			}
+		});
+		
 	buttonHost.setOnAction(new EventHandler<ActionEvent>() {
 		
 		@Override
@@ -60,7 +99,7 @@ public class ConfiguracionController implements Initializable {
 			String nuevoHost = textHost.getText();
 			
 			configurationService.cambiarHost(nuevoHost);
-			JOptionPane.showMessageDialog(null, "actualizado con exito.");
+			JOptionPane.showMessageDialog(null, "Actualizado con exito.");
 			
 		}
 	});
@@ -72,7 +111,7 @@ public class ConfiguracionController implements Initializable {
 			
 			String newPrefix = prefixText.getText();
 			configurationService.cambiarPrefix(newPrefix);
-			JOptionPane.showMessageDialog(null, "actualizado con exito.");
+			JOptionPane.showMessageDialog(null, "Actualizado con exito.");
 			
 			
 		}

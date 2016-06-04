@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import domain.FileConfiguration;
+import domain.UserConfiguration;
 import dto.CategoriaDTO;
 
 public class Persistencia {
@@ -21,8 +22,10 @@ public class Persistencia {
 	// "C:\\Users\\juan.m.lequerica\\Desktop\\snippletsArchives\\";
 
 	// produccion
+
 	private String prefix;
 	private String prefixConf;
+	private String userConfigurationFix;
 	// private String uri =
 	// "http://www.sourcesistemas.com.ar/index.php/webservices/Snipplet_Webservice/";
 	private String uri = "http://www.sourcesistemas.com.ar/index.php/";
@@ -51,14 +54,16 @@ public class Persistencia {
 		if (sistemaOperativo.toLowerCase().indexOf("linux") == 0) {
 			// linux
 			exists = new File(userHome + "/Snipplet").exists();
-			prefix = userHome + "/Snipplet/";
+			prefix = userHome + "Snipplet/";
 			prefixConf = userHome + "SnippletConfig/snipletConf";
+			userConfigurationFix =userHome + "SnippletConfig/userConfiguration"; 
 
 		} else {
 			// windows
 			exists = new File("C:\\Snipplet").exists();
 			prefix = "C:\\Snipplet\\Snipplet\\";
 			prefixConf = "C:\\Snipplet\\snipletConf";
+			userConfigurationFix ="C:\\SnippletConfig\\userConfiguration";
 
 		}
 
@@ -72,7 +77,21 @@ public class Persistencia {
 				new File(userHome + "Snipplet").mkdir();
 				new File(userHome + "SnippletConfig").mkdir();
 				File file = new File(userHome + "SnippletConfig/snipletConf");
+				
 				file.createNewFile();
+				File userConfFile = new File(userConfigurationFix);
+				userConfFile.createNewFile();
+				FileOutputStream userConfStream = new FileOutputStream(userConfFile);
+				ObjectOutputStream userConfOutputStream = new ObjectOutputStream(userConfStream);
+				UserConfiguration userConfigClass = new UserConfiguration();
+				userConfigClass.setUsername("default");
+				userConfigClass.setPassword("default");
+				userConfOutputStream.writeObject(userConfigClass);
+				userConfOutputStream.close();
+				userConfStream.close();
+				
+				
+				
 				FileOutputStream in = new FileOutputStream(file);
 				ObjectOutputStream writer = new ObjectOutputStream(in);
 				FileConfiguration conf = new FileConfiguration();
@@ -90,6 +109,7 @@ public class Persistencia {
 				new File("C:\\Snipplet").mkdir();
 				new File("C:\\SnippletConfig").mkdir();
 				File file = new File("C:\\SnippletConfig\\snipletConf");
+				new File(userConfigurationFix).createNewFile();
 				file.createNewFile();
 				FileOutputStream in = new FileOutputStream(file);
 				ObjectOutputStream writer = new ObjectOutputStream(in);
@@ -118,6 +138,7 @@ public class Persistencia {
 
 		}
 		file.delete();
+		
 		file.createNewFile();
 		FileOutputStream os = new FileOutputStream(file);
 		ObjectOutputStream oos = new ObjectOutputStream(os);
@@ -127,6 +148,20 @@ public class Persistencia {
 
 	}
 
+
+	public void saveNewUserConfiguration(UserConfiguration userConfiguration) throws IOException {
+		 File file = new File(userConfigurationFix);
+		 
+		 if(file.exists());
+		 file.delete();
+		 
+		 file.createNewFile();
+		 FileOutputStream os = new FileOutputStream(file);
+		 ObjectOutputStream oos = new ObjectOutputStream(os);
+		 oos.writeObject(userConfiguration);
+		 oos.close();
+		 os.close();
+	}
 	public FileConfiguration getConfig() throws IOException,
 			ClassNotFoundException {
 		// esto tiene que cambiar dependiendo del sistema opeartivo
@@ -150,12 +185,28 @@ public class Persistencia {
 		return fileConfiguration;
 
 	}
+	
+	
+
+	public UserConfiguration getUserConfig() throws IOException, ClassNotFoundException {
+		File file = new File(userConfigurationFix);
+		FileInputStream in = new FileInputStream(file);
+		@SuppressWarnings("resource")
+		ObjectInputStream ois = new ObjectInputStream(in);
+		UserConfiguration userConfiguration = (UserConfiguration) ois.readObject();
+		return userConfiguration;
+		
+		
+	}
+
 
 	public boolean existeArchivo(String filename) {
 
 		return new File(prefix + filename).exists();
 
 	}
+	
+	
 
 	public void guardar(Object obj, String filename) throws IOException {
 
@@ -239,6 +290,8 @@ public class Persistencia {
 
 	public void getFiles(List<CategoriaDTO> categorias) {
 		File file = new File(prefix);
+		
+		
 		String[] list = file.list();
 
 		for (String string : list) {
