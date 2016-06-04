@@ -2,7 +2,7 @@ package domain;
 
 import java.io.Serializable;
 
-public class FileConfiguration implements Serializable{
+public class FileConfiguration implements Serializable {
 
 	/**
 	 * 
@@ -12,15 +12,22 @@ public class FileConfiguration implements Serializable{
 	private String uri;
 	private String username;
 	private String password;
+	private String configurationPrefix;
 
 	public String getPrefix() {
 		return prefix;
 	}
-	
-	public String getConfigurationPrefix(){
-		
-		return "C:\\SnippletConfig\\";
-		
+
+	public String getConfigurationPrefix() {
+
+		return configurationPrefix;
+
+	}
+
+	public void setConfigurationPrefix(String configurationPrefix) {
+
+		this.configurationPrefix=configurationPrefix;
+
 	}
 
 	public void setPrefix(String prefix) {

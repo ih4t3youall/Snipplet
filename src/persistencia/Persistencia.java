@@ -22,12 +22,15 @@ public class Persistencia {
 	// "C:\\Users\\juan.m.lequerica\\Desktop\\snippletsArchives\\";
 
 	// produccion
-	private String prefix = "C:\\Snipplet\\";
+
+	private String prefix;
+	private String prefixConf;
+	private String userConfigurationFix;
 	// private String uri =
 	// "http://www.sourcesistemas.com.ar/index.php/webservices/Snipplet_Webservice/";
 	private String uri = "http://www.sourcesistemas.com.ar/index.php/";
-	private String snipletFileConfiguration = "C:\\SnippletConfig\\snipletConf";
-	private String userConfigurationFix = "C:\\SnippletConfig\\userConfiguration";
+	private String sistemaOperativo;
+	private String userHome;
 
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
@@ -42,33 +45,98 @@ public class Persistencia {
 	}
 
 	public void inicializarCarpetas() throws IOException {
+		userHome = System.getProperty("user.home") + "/";
+		sistemaOperativo = System.getProperty("os.name");
 
-		boolean exists = new File("C:\\Snipplet").exists();
+		boolean exists;
+
+		// este es el unico checkeo de sistema operativo que se tiene que hacer
+		if (sistemaOperativo.toLowerCase().indexOf("linux") == 0) {
+			// linux
+			exists = new File(userHome + "/Snipplet").exists();
+			prefix = userHome + "Snipplet/";
+			prefixConf = userHome + "SnippletConfig/snipletConf";
+			userConfigurationFix =userHome + "SnippletConfig/userConfiguration"; 
+
+		} else {
+			// windows
+			exists = new File("C:\\Snipplet").exists();
+			prefix = "C:\\Snipplet\\Snipplet\\";
+			prefixConf = "C:\\Snipplet\\snipletConf";
+			userConfigurationFix ="C:\\SnippletConfig\\userConfiguration";
+
+		}
+
 		if (!exists) {
-			new File("C:\\Snipplet").mkdir();
-			new File("C:\\SnippletConfig").mkdir();
-			File file = new File(snipletFileConfiguration);
 
-			file.createNewFile();
-			new File(userConfigurationFix).createNewFile();
-			
-			FileOutputStream in = new FileOutputStream(file);
-			ObjectOutputStream writer = new ObjectOutputStream(in);
-			FileConfiguration conf = new FileConfiguration();
-			conf.setPrefix(prefix);
-			conf.setUri(uri);
-			writer.writeObject(conf);
-			writer.close();
-			in.close();
+			int indexOf = sistemaOperativo.toLowerCase().indexOf("linux");
+
+			// si es linux
+			if (indexOf == 0) {
+
+				new File(userHome + "Snipplet").mkdir();
+				new File(userHome + "SnippletConfig").mkdir();
+				File file = new File(userHome + "SnippletConfig/snipletConf");
+				
+				file.createNewFile();
+				File userConfFile = new File(userConfigurationFix);
+				userConfFile.createNewFile();
+				FileOutputStream userConfStream = new FileOutputStream(userConfFile);
+				ObjectOutputStream userConfOutputStream = new ObjectOutputStream(userConfStream);
+				UserConfiguration userConfigClass = new UserConfiguration();
+				userConfigClass.setUsername("default");
+				userConfigClass.setPassword("default");
+				userConfOutputStream.writeObject(userConfigClass);
+				userConfOutputStream.close();
+				userConfStream.close();
+				
+				
+				
+				FileOutputStream in = new FileOutputStream(file);
+				ObjectOutputStream writer = new ObjectOutputStream(in);
+				FileConfiguration conf = new FileConfiguration();
+				// prefix=userHome+"Snipplet/";
+				conf.setPrefix(prefix);
+				conf.setConfigurationPrefix(userHome
+						+ "SnippletConfig/snipletConf");
+				conf.setUri(uri);
+				writer.writeObject(conf);
+				writer.close();
+				in.close();
+
+			} else {
+
+				new File("C:\\Snipplet").mkdir();
+				new File("C:\\SnippletConfig").mkdir();
+				File file = new File("C:\\SnippletConfig\\snipletConf");
+				new File(userConfigurationFix).createNewFile();
+				file.createNewFile();
+				FileOutputStream in = new FileOutputStream(file);
+				ObjectOutputStream writer = new ObjectOutputStream(in);
+				FileConfiguration conf = new FileConfiguration();
+				conf.setPrefix(prefix);
+				conf.setConfigurationPrefix("C:\\SnippletConfig\\snipletConf");
+				conf.setUri(uri);
+				writer.writeObject(conf);
+				writer.close();
+				in.close();
+			}
 
 		}
 
 	}
 
-	public void saveNewConfiguration(FileConfiguration fileConfiguration) throws IOException {
-		
-		File file = new File(snipletFileConfiguration);
-		if(file.exists());
+	public void saveNewConfiguration(FileConfiguration fileConfiguration)
+			throws IOException {
+		File file;
+		if (sistemaOperativo.toLowerCase().indexOf("linux") == 0) {
+			// si es linux
+			file = new File(fileConfiguration.getConfigurationPrefix());
+		} else {
+			// si es windows
+			file = new File(fileConfiguration.getConfigurationPrefix());
+
+		}
 		file.delete();
 		
 		file.createNewFile();
@@ -79,6 +147,7 @@ public class Persistencia {
 		os.close();
 
 	}
+
 
 	public void saveNewUserConfiguration(UserConfiguration userConfiguration) throws IOException {
 		 File file = new File(userConfigurationFix);
@@ -93,13 +162,25 @@ public class Persistencia {
 		 oos.close();
 		 os.close();
 	}
+	public FileConfiguration getConfig() throws IOException,
+			ClassNotFoundException {
+		// esto tiene que cambiar dependiendo del sistema opeartivo
+		// FIXME
+		int indexOf = sistemaOperativo.toLowerCase().indexOf("linux");
+		File file = new File(prefixConf);
+		// if(indexOf==0){
+		// //linux
+		// file = new File(userHome+"SnippletConfig/snipletConf");
+		// }else{
+		// //windows
+		// file = new File("C:\\SnippletConfig\\snipletConf");
+		// }
 
-	public FileConfiguration getFileConfig() throws IOException, ClassNotFoundException {
-		File file = new File("C:\\SnippletConfig\\snipletConf");
 		FileInputStream in = new FileInputStream(file);
 		@SuppressWarnings("resource")
 		ObjectInputStream ois = new ObjectInputStream(in);
-		FileConfiguration fileConfiguration = (FileConfiguration) ois.readObject();
+		FileConfiguration fileConfiguration = (FileConfiguration) ois
+				.readObject();
 		prefix = fileConfiguration.getPrefix();
 		return fileConfiguration;
 
@@ -158,7 +239,8 @@ public class Persistencia {
 		if (f.exists()) {
 			ObjectInputStream ois = null;
 			try {
-				ois = new ObjectInputStream(new FileInputStream(prefix + filename));
+				ois = new ObjectInputStream(new FileInputStream(prefix
+						+ filename));
 				return (CategoriaDTO) ois.readObject();
 
 			} catch (Exception e) {

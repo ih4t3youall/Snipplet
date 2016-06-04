@@ -29,7 +29,7 @@ public class ConfigurationService {
 	}
 
 	public void cargarConfiguracion() throws ClassNotFoundException, IOException {
-		FileConfiguration config = persistencia.getFileConfig();
+		FileConfiguration config = persistencia.getConfig();
 		UserConfiguration userConfig = persistencia.getUserConfig();
 
 		this.userConfiguration = userConfig;
