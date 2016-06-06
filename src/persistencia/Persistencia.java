@@ -45,7 +45,7 @@ public class Persistencia {
 	}
 
 	public void inicializarCarpetas() throws IOException {
-		userHome = System.getProperty("user.home") + "/";
+		
 		sistemaOperativo = System.getProperty("os.name");
 
 		boolean exists;
@@ -53,6 +53,7 @@ public class Persistencia {
 		// este es el unico checkeo de sistema operativo que se tiene que hacer
 		if (sistemaOperativo.toLowerCase().indexOf("linux") == 0) {
 			// linux
+			userHome = System.getProperty("user.home") + "/";
 			exists = new File(userHome + "/Snipplet").exists();
 			prefix = userHome + "Snipplet/";
 			prefixConf = userHome + "SnippletConfig/snipletConf";
@@ -61,8 +62,9 @@ public class Persistencia {
 		} else {
 			// windows
 			exists = new File("C:\\Snipplet").exists();
-			prefix = "C:\\Snipplet\\Snipplet\\";
-			prefixConf = "C:\\Snipplet\\snipletConf";
+			userHome = System.getProperty("user.home") + "\\";
+			prefix = "C:\\Snipplet\\";
+			prefixConf = "C:\\SnippletConfig\\snipletConf";
 			userConfigurationFix ="C:\\SnippletConfig\\userConfiguration";
 
 		}
@@ -106,16 +108,26 @@ public class Persistencia {
 
 			} else {
 
-				new File("C:\\Snipplet").mkdir();
+				new File(prefix).mkdir();
 				new File("C:\\SnippletConfig").mkdir();
-				File file = new File("C:\\SnippletConfig\\snipletConf");
-				new File(userConfigurationFix).createNewFile();
+				File file = new File(prefixConf);
 				file.createNewFile();
+				File userConfFile = new File(userConfigurationFix);
+				userConfFile.createNewFile();
+				FileOutputStream userConfStream = new FileOutputStream(userConfFile);
+				ObjectOutputStream userConfOutputStream = new ObjectOutputStream(userConfStream);
+				UserConfiguration userConfigClass = new UserConfiguration();
+				userConfigClass.setUsername("default");
+				userConfigClass.setPassword("default");
+				userConfOutputStream.writeObject(userConfigClass);
+				userConfOutputStream.close();
+				userConfStream.close();
+				
 				FileOutputStream in = new FileOutputStream(file);
 				ObjectOutputStream writer = new ObjectOutputStream(in);
 				FileConfiguration conf = new FileConfiguration();
 				conf.setPrefix(prefix);
-				conf.setConfigurationPrefix("C:\\SnippletConfig\\snipletConf");
+				conf.setConfigurationPrefix(prefixConf);
 				conf.setUri(uri);
 				writer.writeObject(conf);
 				writer.close();
