@@ -28,7 +28,7 @@ public class Persistencia {
 	private String userConfigurationFix;
 	// private String uri =
 	// "http://www.sourcesistemas.com.ar/index.php/webservices/Snipplet_Webservice/";
-	private String uri = "http://www.sourcesistemas.com.ar/index.php/";
+	private String uri = "example:uri";
 	private String sistemaOperativo;
 	private String userHome;
 
