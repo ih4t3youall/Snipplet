@@ -3,6 +3,7 @@ package application;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -20,7 +21,11 @@ public class Main extends Application {
 			root = (Pane) loader.load();
 			
 			Scene scene = new Scene(root);
+			
             primaryStage.setResizable(false);
+            
+            primaryStage.getIcons().add(new Image( getClass().getResourceAsStream("../resources/icono.png") ));
+            
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
