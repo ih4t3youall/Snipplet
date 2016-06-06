@@ -1,5 +1,7 @@
 package application;
 
+import java.io.InputStream;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -24,7 +26,10 @@ public class Main extends Application {
 			
             primaryStage.setResizable(false);
             primaryStage.setTitle("Snipplet!");
-            primaryStage.getIcons().add(new Image( getClass().getResourceAsStream("../resources/icono.png") ));
+            InputStream resourceAsStream = getClass().getResourceAsStream("../resources/icono.png");
+            if(resourceAsStream != null){
+            primaryStage.getIcons().add(new Image(resourceAsStream));
+            }
             
 			primaryStage.setScene(scene);
 			primaryStage.show();
