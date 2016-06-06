@@ -229,6 +229,7 @@ public class InicioController implements Initializable {
 
 					Scene scene = new Scene(root);
 					secondaryStage.setResizable(false);
+					secondaryStage.setTitle("Configuracion");
 					secondaryStage.setScene(scene);
 					secondaryStage.show();
 				} catch (IOException e) {
@@ -256,7 +257,7 @@ public class InicioController implements Initializable {
 					controller.setScene(scene);
 					
 					secondaryStage.setResizable(false);
-					
+					secondaryStage.setTitle("Nube!");
 					secondaryStage.setScene(scene);
 					secondaryStage.show();
 				} catch (IOException e) {

@@ -23,7 +23,7 @@ public class Main extends Application {
 			Scene scene = new Scene(root);
 			
             primaryStage.setResizable(false);
-            
+            primaryStage.setTitle("Snipplet!");
             primaryStage.getIcons().add(new Image( getClass().getResourceAsStream("../resources/icono.png") ));
             
 			primaryStage.setScene(scene);
