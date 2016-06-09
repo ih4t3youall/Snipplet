@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import services.ConfigurationService;
+import services.SnippletService;
 
 public class ConfiguracionController implements Initializable {
 
@@ -40,6 +41,8 @@ public class ConfiguracionController implements Initializable {
 	private TextField textoPassword;
 	
 	private ConfigurationService configurationService = (ConfigurationService) SpringContext.getContext().getBean("configurationService");
+	
+	private SnippletService snippletService = (SnippletService) SpringContext.getContext().getBean("snippletService");
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -110,6 +113,7 @@ public class ConfiguracionController implements Initializable {
 		public void handle(ActionEvent event) {
 			
 			String newPrefix = prefixText.getText();
+			snippletService.crearNuevaCarpeta(newPrefix);
 			configurationService.cambiarPrefix(newPrefix);
 			JOptionPane.showMessageDialog(null, "Actualizado con exito.");
 			

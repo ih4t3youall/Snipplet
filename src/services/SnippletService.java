@@ -369,5 +369,10 @@ public class SnippletService {
 		this.configurationService = configurationService;
 	}
 
+	public void crearNuevaCarpeta(String newPrefix) {
+		persistencia.createFolder(newPrefix);
+		
+	}
+
 
 }
