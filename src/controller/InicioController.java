@@ -46,6 +46,9 @@ public class InicioController implements Initializable {
 
 	@FXML
 	private Button botonMenos;
+	
+	@FXML
+	private Button botonBuscar;
 
 	@FXML
 	private Button refresh;
