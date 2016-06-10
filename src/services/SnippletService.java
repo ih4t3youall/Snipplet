@@ -93,6 +93,31 @@ public class SnippletService {
 		return panels;
 
 	}
+	
+
+	public List<AnchorPane> loadSnipplets(List<Snipplet> snippletByCategory,String categoria) {
+		AnchorPane populatedPanel = null;
+
+		List<AnchorPane> panels = new ArrayList<AnchorPane>();
+		try {
+			if (snippletByCategory != null) {
+				for (Snipplet snipplet : snippletByCategory) {
+					populatedPanel = new AnchorPane();
+					populatedPanel = snippletHelper.getPopulatedPanel(categoria, snipplet);
+					panels.add(populatedPanel);
+
+				}
+
+			} else {
+				return null;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return panels;
+
+	}
+	
 
 	private List<Snipplet> getSnippletByCategory(String categoria) {
 
@@ -151,6 +176,24 @@ public class SnippletService {
 		CategoriaDTO categoriaDTO = getCategoriaDTO(categoria);
 		categoriaDTO.addSnipplet(snipplet);
 
+	}
+	
+	public List<Snipplet> buscarEnCategorias(String palabra,String categoria){
+		CategoriaDTO categoriaDTO = getCategoriaDTO(categoria);
+		
+		
+		List<Snipplet> snipplets = new ArrayList<Snipplet>();
+		for (Snipplet snip : categoriaDTO.getSnipplets()) {
+			
+			boolean buscarTexto = snip.buscarTexto(palabra);
+			if(buscarTexto)
+			snipplets.add(snip);
+		}
+		
+		return snipplets;
+		
+		
+		
 	}
 	
 	
