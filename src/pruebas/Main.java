@@ -53,6 +53,13 @@ final HBox hbs [] = new HBox [values.length];
         
     public static void main(String[] args) {
 //        launch(args);
-    	new Inicio();
+//    	new Inicio();
+    	
+    	String hola ="esto es un string";
+    	
+    	System.out.println(hola.indexOf("asdd"));
+    	
+    	
+    	
     }
 }
