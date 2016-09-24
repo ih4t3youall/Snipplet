@@ -141,11 +141,6 @@ public class SnippletService {
 
 	}
 
-	public void recuperarPrueba(String filename) {
-
-		persistencia.recuperarGuardado(filename);
-
-	}
 
 	public void cargarArchivos() {
 

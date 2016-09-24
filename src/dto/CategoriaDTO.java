@@ -17,10 +17,14 @@ public class CategoriaDTO implements Serializable {
 	private List<Snipplet> snipplets;
 	private List<String> tags;
 
-	
-	
-	public CategoriaDTO(){}
-	
+	public CategoriaDTO() {
+	}
+
+	public CategoriaDTO(String nombre) {
+		this.nombre = nombre;
+
+	}
+
 	public void addSnipplet(Snipplet snipplet) {
 		if (snipplets == null) {
 
@@ -29,11 +33,6 @@ public class CategoriaDTO implements Serializable {
 		}
 
 		snipplets.add(snipplet);
-
-	}
-
-	public CategoriaDTO(String nombre) {
-		this.nombre = nombre;
 
 	}
 
