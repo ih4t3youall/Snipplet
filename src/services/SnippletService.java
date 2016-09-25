@@ -69,6 +69,37 @@ public class SnippletService {
 		return persistencia.listDirectory();
 
 	}
+	
+
+	public void cleanCategoryList(String categoria) {
+		
+		CategoriaDTO searchCategory = searchCategory(categoria);
+		
+		List<Snipplet> snipplets = searchCategory.getSnipplets();
+		
+		if (snipplets !=  null )
+			snipplets.clear();
+		
+	}
+	
+	/**
+	 * devuelve una categoria especifica
+	 * @param categoria , nombre de la categoria de la cual quiero recibir la lista
+	 */
+	private CategoriaDTO searchCategory(String categoria){
+		
+		for (CategoriaDTO categoriaDTO : categorias) {
+			
+			if(categoriaDTO.getNombre().equals(categoria))
+					return categoriaDTO;
+			
+			
+		}
+		
+		return null;
+		
+	}
+	
 
 	public List<AnchorPane> loadSnippletsPorCategoria(String categoria) {
 		AnchorPane populatedPanel = null;
@@ -411,6 +442,7 @@ public class SnippletService {
 		persistencia.createFolder(newPrefix);
 		
 	}
+
 
 
 }

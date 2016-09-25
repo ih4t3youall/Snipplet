@@ -11,6 +11,8 @@ public class Snipplet implements Serializable {
 
 	private String titulo;
 	private String contenido;
+	
+	
 
 	public String getTitulo() {
 		return titulo;

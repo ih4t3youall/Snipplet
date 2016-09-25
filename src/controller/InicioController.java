@@ -197,32 +197,6 @@ public class InicioController implements Initializable {
 		fxmlMenu.getItems().add(guardarEnLaNube);
 		fxmlMenu.getItems().add(configuracion);
 
-		// MenuItem sourcesistemas = new MenuItem("sourcesistemas");
-		// fxmlEdit.getItems().add(sourcesistemas);
-
-		// sourcesistemas.setOnAction(new EventHandler<ActionEvent>() {
-		//
-		// @Override
-		// public void handle(ActionEvent event) {
-		//
-		// FXMLLoader loader = new FXMLLoader();
-		// Stage secondaryStage = new Stage();
-		// loader.setLocation(getClass().getResource("/views/ConsultasSource.fxml"));
-		// AnchorPane root;
-		// try {
-		// root = (AnchorPane) loader.load();
-		//
-		// Scene scene = new Scene(root);
-		// secondaryStage.setResizable(false);
-		// secondaryStage.setScene(scene);
-		// secondaryStage.show();
-		// } catch (IOException e) {
-		// JOptionPane.showMessageDialog(null, "Error !");
-		//
-		// e.printStackTrace();
-		// }
-		// }
-		// });
 
 		configuracion.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -361,11 +335,10 @@ public class InicioController implements Initializable {
 		if (panels != null) {
 
 			for (AnchorPane anchorPane : panels) {
-
 				vbox.getChildren().add(0, anchorPane);
 			}
+			
 		}
-		
 		
 	}
 

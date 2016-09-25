@@ -5,15 +5,19 @@ import java.util.ResourceBundle;
 
 import context.SpringContext;
 import domain.Snipplet;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import services.SnippletService;
 
 public class PanelController implements Initializable {
@@ -28,9 +32,6 @@ public class PanelController implements Initializable {
 	private TextArea textArea;
 
 	@FXML
-	private Button add;
-
-	@FXML
 	private Button copy;
 
 	@FXML
@@ -39,6 +40,8 @@ public class PanelController implements Initializable {
 	private String id;
 
 	private String categoria;
+
+	private VBox vbox = (VBox) SpringContext.getContext().getBean("vbox");
 
 	private SnippletService snnipletService = (SnippletService) SpringContext.getContext().getBean("snippletService");
 
@@ -64,28 +67,32 @@ public class PanelController implements Initializable {
 			public void handle(ActionEvent event) {
 
 				String text = textArea.getText();
-				if (text != null) {
+				ObservableList<Node> list = vbox.getChildren();
+				// elimino todos los sniplets de la categoria seleccionada
+				snnipletService.cleanCategoryList(categoria);
+				for (int i = 0; i < list.size(); i++) {
 
-					try {
-						snnipletService.guardarCategoria(text, categoria);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+					AnchorPane anchorPane = (AnchorPane) list.get(i);
+					ObservableList<Node> node = anchorPane.getChildren();
+					TextArea textArea = (TextArea) node.get(1);
+					TextField textField = (TextField) node.get(4);
 
-			}
-		});
+					String titulo = textField.getText();
+					String contenido = textArea.getText();
 
-		add.setOnAction(new EventHandler<ActionEvent>() {
+					Snipplet snipplet = new Snipplet();
+					snipplet.setTitulo(titulo);
+					snipplet.setContenido(contenido);
 
-			@Override
-			public void handle(ActionEvent event) {
-				Snipplet snipplet = new Snipplet();
-				snipplet.setContenido(textArea.getText());
-				snipplet.setTitulo(titulo.getText());
-				if (snipplet.getContenido() != null)
 					snnipletService.agregarSnipplet(snipplet, categoria);
+
+				}
+				try {
+					snnipletService.guardarCategoria("", categoria);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 			}
 		});

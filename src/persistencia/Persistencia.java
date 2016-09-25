@@ -55,26 +55,9 @@ public class Persistencia {
 		userConfigurationFix =userHome + "SnippletConfig/userConfiguration"; 
 
 
-//		// este es el unico checkeo de sistema operativo que se tiene que hacer
-//		if (sistemaOperativo.toLowerCase().indexOf("linux") == 0) {
-//			// linux
-//
-//		} else {
-//			// windows
-//			exists = new File("C:\\Snipplet").exists();
-//			userHome = System.getProperty("user.home") + "\\";
-//			prefix = "C:\\Snipplet\\";
-//			prefixConf = "C:\\SnippletConfig\\snipletConf";
-//			userConfigurationFix ="C:\\SnippletConfig\\userConfiguration";
-//
-//		}
 
 		if (!exists) {
 
-//			int indexOf = sistemaOperativo.toLowerCase().indexOf("linux");
-
-			// si es linux
-//			if (indexOf == 0) {
 
 				new File(userHome + "Snipplet").mkdir();
 				new File(userHome + "SnippletConfig").mkdir();
@@ -106,33 +89,6 @@ public class Persistencia {
 				writer.close();
 				in.close();
 
-//			} else {
-//
-//				new File(prefix).mkdir();
-//				new File("C:\\SnippletConfig").mkdir();
-//				File file = new File(prefixConf);
-//				file.createNewFile();
-//				File userConfFile = new File(userConfigurationFix);
-//				userConfFile.createNewFile();
-//				FileOutputStream userConfStream = new FileOutputStream(userConfFile);
-//				ObjectOutputStream userConfOutputStream = new ObjectOutputStream(userConfStream);
-//				UserConfiguration userConfigClass = new UserConfiguration();
-//				userConfigClass.setUsername("default");
-//				userConfigClass.setPassword("default");
-//				userConfOutputStream.writeObject(userConfigClass);
-//				userConfOutputStream.close();
-//				userConfStream.close();
-//				
-//				FileOutputStream in = new FileOutputStream(file);
-//				ObjectOutputStream writer = new ObjectOutputStream(in);
-//				FileConfiguration conf = new FileConfiguration();
-//				conf.setPrefix(prefix);
-//				conf.setConfigurationPrefix(prefixConf);
-//				conf.setUri(uri);
-//				writer.writeObject(conf);
-//				writer.close();
-//				in.close();
-//			}
 
 		}
 
@@ -141,14 +97,14 @@ public class Persistencia {
 	public void saveNewConfiguration(FileConfiguration fileConfiguration)
 			throws IOException {
 		File file;
-		if (sistemaOperativo.toLowerCase().indexOf("linux") == 0) {
+//		if (sistemaOperativo.toLowerCase().indexOf("linux") == 0) {
 			// si es linux
 			file = new File(fileConfiguration.getConfigurationPrefix());
-		} else {
-			// si es windows
-			file = new File(fileConfiguration.getConfigurationPrefix());
-
-		}
+//		} else {
+//			// si es windows
+//			file = new File(fileConfiguration.getConfigurationPrefix());
+//
+//		}
 		file.delete();
 		
 		file.createNewFile();
@@ -178,7 +134,7 @@ public class Persistencia {
 			ClassNotFoundException {
 		// esto tiene que cambiar dependiendo del sistema opeartivo
 		// FIXME
-		int indexOf = sistemaOperativo.toLowerCase().indexOf("linux");
+//		int indexOf = sistemaOperativo.toLowerCase().indexOf("linux");
 		File file = new File(prefixConf);
 		// if(indexOf==0){
 		// //linux
