@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -204,7 +205,7 @@ public class SnippletService {
 
 	}
 	
-	public List<Snipplet> buscarEnCategorias(String palabra,String categoria){
+	public List<Snipplet> searchInCategory(String palabra,String categoria){
 		CategoriaDTO categoriaDTO = getCategoriaDTO(categoria);
 		
 		
@@ -218,6 +219,32 @@ public class SnippletService {
 		
 		return snipplets;
 		
+		
+		
+	}
+	
+	public List<Snipplet> searchAll(String palabra){
+		
+		
+		List<Snipplet> snipplet = new LinkedList<Snipplet>();
+		
+		for (CategoriaDTO categoriaDTO : categorias) {
+			
+			
+			List<Snipplet> snipplets = categoriaDTO.getSnipplets();
+			
+			for (Snipplet snipplet2 : snipplets) {
+				
+				boolean buscarTexto = snipplet2.buscarTexto(palabra);
+				if(buscarTexto)
+					snipplet.add(snipplet2);
+				
+			}
+			
+			
+		}
+		
+		return snipplet;
 		
 		
 	}

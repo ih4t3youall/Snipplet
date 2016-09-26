@@ -298,8 +298,7 @@ public class InicioController implements Initializable {
 				String palabraABuscar = JOptionPane.showInputDialog("Buscar:");
 				if(palabraABuscar != null){
 				String categoria = fxmlListView.getSelectionModel().getSelectedItem();
-				List<Snipplet> buscarEnCategorias = snippletService
-						.buscarEnCategorias(palabraABuscar, categoria);
+				List<Snipplet> buscarEnCategorias = snippletService.searchAll(palabraABuscar);
 				mostrarSnippletsDeBusqueda(buscarEnCategorias,categoria);
 				}
 
