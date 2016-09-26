@@ -2,12 +2,14 @@ package application.application;
 
 import java.io.InputStream;
 
+import controller.InicioController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import listeners.InicioKeyHandler;
 
 public class Main extends Application {
 
@@ -19,8 +21,11 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/views/Inicio.fxml"));
+			loader.setLocation(getClass().getResource("/views/Inicio.fxml"));
 			root = (Pane) loader.load();
+			InicioController controller = loader.getController();
+			
+			controller.setListener(primaryStage);
 			
 			Scene scene = new Scene(root);
 			
@@ -30,6 +35,8 @@ public class Main extends Application {
             if(resourceAsStream != null){
             primaryStage.getIcons().add(new Image(resourceAsStream));
             }
+            
+           
             
 			primaryStage.setScene(scene);
 			primaryStage.show();

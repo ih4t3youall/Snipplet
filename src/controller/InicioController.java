@@ -29,6 +29,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import listeners.InicioKeyHandler;
 import services.SnippletService;
 
 public class InicioController implements Initializable {
@@ -73,6 +74,8 @@ public class InicioController implements Initializable {
 
 	protected ObservableList<String> items;
 
+	private Stage stage;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		System.out.println("Started up!");
@@ -82,25 +85,12 @@ public class InicioController implements Initializable {
 		fxmlListView.setItems(items);
 
 		refreshList();
+		
+		
 
 		fxmlListView.getSelectionModel().selectedItemProperty()
 				.addListener(new ChangeListener<String>() {
 					public void changed(ObservableValue<? extends String> observable,	String oldValue, String newValue) {
-//						List<AnchorPane> panels = snippletService.loadSnippletsPorCategoria(newValue);
-//						activarButtons();
-//						int size = vbox.getChildren().size();
-//
-//						for (int i = 0; i < size; i++) {
-//							vbox.getChildren().remove(0);
-//						}
-//
-//						if (panels != null) {
-//
-//							for (AnchorPane anchorPane : panels) {
-//
-//								vbox.getChildren().add(0, anchorPane);
-//							}
-//						}
 						cargarPorCategoria(newValue);
 
 					}
@@ -109,7 +99,7 @@ public class InicioController implements Initializable {
 	}
 
 	public void refreshList() {
-
+		//scene.setOnKeyPressed(new InicioKeyHandler(this));
 		snippletService.cargarArchivos();
 		removerItemsLista();
 		for (CategoriaDTO categoria : snippletService.getCategorias()) {
@@ -372,5 +362,11 @@ public class InicioController implements Initializable {
 	public void setId(String id) {
 		this.id = id;
 	}
+
+	public void setListener(Stage primaryStage) {
+		this.stage = primaryStage;
+		
+	}
+
 
 }
