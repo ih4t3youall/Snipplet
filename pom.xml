@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>Snipplet</groupId>
 	<artifactId>Snipplet</artifactId>
@@ -11,9 +13,9 @@
 		<log4j.version>1.2.17</log4j.version>
 	</properties>
 
-	
-	
-	
+
+
+
 	<dependencies>
 
 
@@ -86,10 +88,32 @@
 
 	</dependencies>
 
-	
+
 	<build>
+
 		<finalName>Snipplet</finalName>
 		<plugins>
+
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -101,44 +125,44 @@
 				</configuration>
 			</plugin>
 
-		
- <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>create-jfxjar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-              
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-         <!--<outputDirectory>${user.home} </outputDirectory>-->
-         <outputDirectory>
-                             ${project.basedir}
-                            </outputDirectory>
-          <archive>
-          <manifest>
-            <addClasspath>true</addClasspath>
-            <mainClass>application.Main</mainClass>
-          </manifest>
-        </archive>
-		<updateExistingJar>true</updateExistingJar>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-            <appendAssemblyId>false</appendAssemblyId>
-        </configuration>
-      </plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>create-jfxjar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!--<outputDirectory>${user.home} </outputDirectory> -->
+					<outputDirectory>
+						${project.basedir}
+					</outputDirectory>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>application.Main</mainClass>
+						</manifest>
+					</archive>
+					<updateExistingJar>true</updateExistingJar>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<appendAssemblyId>false</appendAssemblyId>
+				</configuration>
+			</plugin>
 
 
 		</plugins>
-		
-	
-		
-		
+
+
+
+
 	</build>
-	
+
 </project>
