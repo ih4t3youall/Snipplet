@@ -22,6 +22,7 @@ public class Main extends Application {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource("/views/Inicio.fxml"));
+			
 			root = (Pane) loader.load();
 			InicioController controller = loader.getController();
 			
