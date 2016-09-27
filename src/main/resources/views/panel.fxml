@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="339.0" prefWidth="472.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PanelController">
+<AnchorPane prefHeight="339.0" prefWidth="472.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ar.com.snipplet.controller.PanelController">
    <children>
       
       <Button fx:id="guardar" layoutX="397.0" layoutY="300.0" mnemonicParsing="false" text="Guardar" />

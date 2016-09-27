@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="479.0" prefWidth="329.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SyncroController">
+<AnchorPane prefHeight="479.0" prefWidth="329.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ar.com.snipplet.controller.SyncroController">
    <children>
       <Button fx:id="upload" disable="true" layoutX="37.0" layoutY="431.0" mnemonicParsing="false" text="upload" />
       <Button fx:id="botonArchivo" layoutX="33.0" layoutY="396.0" mnemonicParsing="false" text="seleccionarArchivo" />
