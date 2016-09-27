@@ -1,7 +1,4 @@
-.settings
-bin
-Snipplet
-target
 .classpath
+.settings
+target
 .project
-Snipplet.jar
