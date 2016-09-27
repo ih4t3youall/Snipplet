@@ -14,7 +14,7 @@ public class CopyKeyHandler implements EventHandler<KeyEvent>{
 
 	@Override
 	public void handle(KeyEvent key) {
-	System.out.println(key.getCode());
+	System.out.println("copy handler= "+key.getCode());
 		
 		if(key.getCode().toString().equals("F4"))
 			System.out.println("estoy copiando");

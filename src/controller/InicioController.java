@@ -82,7 +82,7 @@ public class InicioController implements Initializable {
 		configure();
 		items = FXCollections.observableArrayList();
 		fxmlListView.setItems(items);
-
+		
 		refreshList();
 		
 		
@@ -106,6 +106,10 @@ public class InicioController implements Initializable {
 			items.add(categoria.getNombre());
 		}
 
+	}
+	
+	public void requestFocus(){
+		fxmlListView.requestFocus();
 	}
 
 	private void removerItemsLista() {
