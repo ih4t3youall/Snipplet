@@ -29,7 +29,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import listeners.InicioKeyHandler;
 import services.SnippletService;
 
 public class InicioController implements Initializable {
@@ -285,12 +284,7 @@ public class InicioController implements Initializable {
 
 			@Override
 			public void handle(ActionEvent event) {
-				String palabraABuscar = JOptionPane.showInputDialog("Buscar:");
-				if(palabraABuscar != null){
-				String categoria = fxmlListView.getSelectionModel().getSelectedItem();
-				List<Snipplet> buscarEnCategorias = snippletService.searchAll(palabraABuscar);
-				mostrarSnippletsDeBusqueda(buscarEnCategorias,categoria);
-				}
+			search();
 
 			}
 		});
@@ -309,7 +303,15 @@ public class InicioController implements Initializable {
 
 	}
 	
-
+	//es public porque tambien accede desde el keylistener
+	public void search(){
+		String palabraABuscar = JOptionPane.showInputDialog("Buscar:");
+		if(palabraABuscar != null){
+		String categoria = fxmlListView.getSelectionModel().getSelectedItem();
+		List<Snipplet> buscarEnCategorias = snippletService.searchAll(palabraABuscar);
+		mostrarSnippletsDeBusqueda(buscarEnCategorias,categoria);
+		}
+	}
 	
 	
 	private void cargarPorCategoria(String categoria){

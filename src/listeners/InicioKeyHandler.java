@@ -1,7 +1,5 @@
 package listeners;
 
-import javax.swing.JOptionPane;
-
 import controller.InicioController;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
@@ -19,7 +17,7 @@ public class InicioKeyHandler implements EventHandler<KeyEvent> {
 		System.out.println(key.getCode());
 		
 		if(key.getCode().toString().equals("F3"))
-			JOptionPane.showMessageDialog(null, "buscar");
+			inicioControlelr.search();
 		
 		
 	}
