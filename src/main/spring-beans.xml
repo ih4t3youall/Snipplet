@@ -1,0 +1,35 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+<bean id="persistencia" class="persistencia.Persistencia">
+</bean>
+	
+<bean id="snippletHelper" class="helper.SnippletsHelper">
+
+</bean>
+
+<bean id="vbox" class="javafx.scene.layout.VBox">
+
+</bean>
+
+<bean id="configurationService" class="services.ConfigurationService">
+<property name="persistencia" ref="persistencia"></property>
+</bean>
+
+<bean id="snippletService" class="services.SnippletService">
+<property name="persistencia" ref="persistencia"></property>
+<property name="snippletHelper" ref="snippletHelper"></property>
+<property name="vbox" ref="vbox"></property>
+<property name="configurationService" ref="configurationService"></property>
+</bean>
+
+
+
+
+
+
+
+</beans>
