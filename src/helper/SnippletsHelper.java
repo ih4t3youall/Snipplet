@@ -5,7 +5,9 @@ import java.io.IOException;
 import controller.PanelController;
 import domain.Snipplet;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import listeners.CopyKeyHandler;
 
 
 
@@ -23,6 +25,7 @@ public class SnippletsHelper {
 		load.setId("numero"+contador);
 		PanelController controller =(PanelController) loader.getController();
 		controller.setId("numero"+contador);
+		
 		controller.setCategoria(categoria);
 		contador++;
 		
