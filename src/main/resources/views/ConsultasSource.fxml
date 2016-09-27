@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="419.0" prefWidth="409.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ar.com.Snipplet.controllers.SourceController">
+   <children>
+      <Label layoutX="14.0" layoutY="35.0" text="Nombre" />
+      <Label layoutX="14.0" layoutY="63.0" text="mail" />
+      <Label layoutX="14.0" layoutY="90.0" text="asunto" />
+      <Label layoutX="14.0" layoutY="147.0" text="texto" />
+      <Label layoutX="14.0" layoutY="119.0" text="leido" />
+      <Label fx:id="texto" layoutX="81.0" layoutY="119.0" text="Label" />
+      <Label fx:id="leido" layoutX="81.0" layoutY="147.0" text="Label" />
+      <Label fx:id="asunto" layoutX="81.0" layoutY="90.0" text="Label" />
+      <Label fx:id="mail" layoutX="81.0" layoutY="63.0" text="Label" />
+      <Label fx:id="nombre" layoutX="81.0" layoutY="35.0" text="Label" />
+      <Button fx:id="buttonLeft" layoutX="15.0" layoutY="263.0" mnemonicParsing="false" text="&lt;" />
+      <Button fx:id="buttonRight" layoutX="283.0" layoutY="263.0" mnemonicParsing="false" text="&gt;" />
+   </children>
+</AnchorPane>

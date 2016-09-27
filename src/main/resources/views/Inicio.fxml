@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="747.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ar.com.Snipplet.controllers.InicioController">
+   <children>
+      <ListView fx:id="fxmlListView" layoutX="14.0" layoutY="35.0" prefHeight="333.0" prefWidth="197.0" />
+      <MenuBar layoutX="6.0" layoutY="2.0" prefHeight="25.0" prefWidth="731.0">
+        <menus>
+          <Menu fx:id="fxmlMenu" mnemonicParsing="false" text="File">
+          </Menu>
+          <Menu fx:id="fxmlEdit" mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <ScrollPane fx:id="scrollPane" layoutX="220.0" layoutY="35.0" prefHeight="347.0" prefWidth="517.0" />
+      <Button fx:id="botonMas" disable="true" layoutX="14.0" layoutY="368.0" mnemonicParsing="false" text="+" />
+      <Button fx:id="botonMenos" disable="true" layoutX="49.0" layoutY="368.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="24.0" text="-" />
+      <Button fx:id="refresh" layoutX="87.0" layoutY="368.0" mnemonicParsing="false" text="Refrescar" />
+      <Button fx:id="botonBuscar" layoutX="164.0" layoutY="368.0" mnemonicParsing="false" text="o" />
+      <Button fx:id="botonReset" layoutX="195.0" layoutY="368.0" mnemonicParsing="false" text="r" />
+      
+   </children>
+</Pane>
