@@ -18,6 +18,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import listeners.CopyKeyHandler;
 import services.SnippletService;
 
 public class PanelController implements Initializable {
@@ -47,6 +48,8 @@ public class PanelController implements Initializable {
 
 	final Clipboard clipboard = Clipboard.getSystemClipboard();
 	final ClipboardContent content = new ClipboardContent();
+
+	private CopyKeyHandler copyHandler;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -139,6 +142,12 @@ public class PanelController implements Initializable {
 
 	public void setTitulo(TextField titulo) {
 		this.titulo = titulo;
+	}
+
+	public void setListener(CopyKeyHandler copyHandler) {
+
+		this.copyHandler = copyHandler;
+		
 	}
 
 }

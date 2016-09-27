@@ -6,6 +6,7 @@ import controller.PanelController;
 import domain.Snipplet;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
+import listeners.CopyKeyHandler;
 
 
 
@@ -23,6 +24,8 @@ public class SnippletsHelper {
 		load.setId("numero"+contador);
 		PanelController controller =(PanelController) loader.getController();
 		controller.setId("numero"+contador);
+		CopyKeyHandler copyHandler = new CopyKeyHandler(controller);
+		load.getScene().setOnKeyPressed(copyHandler);
 		controller.setCategoria(categoria);
 		contador++;
 		
