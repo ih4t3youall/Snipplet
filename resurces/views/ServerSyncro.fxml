@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="479.0" prefWidth="329.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SyncroController">
+   <children>
+      <Button fx:id="upload" disable="true" layoutX="37.0" layoutY="431.0" mnemonicParsing="false" text="upload" />
+      <Button fx:id="botonArchivo" layoutX="33.0" layoutY="396.0" mnemonicParsing="false" text="seleccionarArchivo" />
+      <Button fx:id="download" disable="true" layoutX="124.0" layoutY="319.0" mnemonicParsing="false" text="download" />
+      <Button fx:id="listarServer" layoutX="23.0" layoutY="319.0" mnemonicParsing="false" text="Listar Server" />
+      <ListView fx:id="fxmlListaServer" layoutX="21.0" layoutY="25.0" prefHeight="282.0" prefWidth="294.0" />
+      <ProgressIndicator fx:id="cargando" blendMode="RED" cacheHint="ROTATE" layoutX="260.0" layoutY="324.0" />
+   </children>
+</AnchorPane>
