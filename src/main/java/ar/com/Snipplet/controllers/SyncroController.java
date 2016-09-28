@@ -35,10 +35,6 @@ import okhttp3.RequestBody;
 
 public class SyncroController implements Initializable {
 
-	// String uri =
-	// "http://localhost:83/sourcesistemas/index.php/webservices/Snipplet_Webservice/";
-	// String uri =
-	// "http://www.sourcesistemas.com.ar/index.php/webservices/Snipplet_Webservice/";
 	private ConfigurationService configurationService = (ConfigurationService) SpringContext.getContext()
 			.getBean("configurationService");
 	@FXML
@@ -181,7 +177,7 @@ public class SyncroController implements Initializable {
 	public CategoriaDTO getFromServer(String filename)
 			throws JsonGenerationException, JsonMappingException, IOException {
 
-		String url = configurationService.getUri() + "index.php/webservices/Snipplet_Webservice/download/";
+		String url = configurationService.getUri() + "returnCategory";
 		CategoriaDTO recuperarGuardado = new CategoriaDTO();
 		recuperarGuardado.setNombre(filename);
 		
@@ -212,7 +208,7 @@ public class SyncroController implements Initializable {
 
 	public String send_text(String filename) throws IOException {
 
-		String url = configurationService.getUri() + "index.php/webservices/Snipplet_Webservice/guardar_archivo/";
+		String url = configurationService.getUri() + "guardarCategoria";
 		CategoriaDTO recuperarGuardado = persistencia.recuperarGuardado(filename);
 		UserConfiguration userConfiguration = configurationService.getUserConfiguration();
 		SendDTO send  = new SendDTO();
@@ -245,7 +241,7 @@ public class SyncroController implements Initializable {
 
 	public String[] listar_server() throws IOException {
 
-		String url = configurationService.getUri() + "index.php/webservices/Snipplet_Webservice/listar_archivos/";
+		String url = configurationService.getUri() + "listarServer";
 
 		MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 		
