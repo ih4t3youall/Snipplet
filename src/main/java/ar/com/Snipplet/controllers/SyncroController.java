@@ -47,6 +47,10 @@ public class SyncroController implements Initializable {
 	private Button botonArchivo;
 	@FXML
 	private ProgressIndicator cargando;
+	@FXML
+	private Button borrarServer;
+	@FXML
+	private Button borrar;
 
 	@FXML
 	private ListView<String> fxmlListaServer;
@@ -56,33 +60,28 @@ public class SyncroController implements Initializable {
 	private Persistencia persistencia = (Persistencia) SpringContext.getContext().getBean("persistencia");
 
 	private SnippletService snippletService = (SnippletService) SpringContext.getContext().getBean("snippletService");
-	
+
 	private Scene scene;
+
 	public void setScene(Scene scene) {
-		this.scene=scene;
-		
+		this.scene = scene;
+
 	}
-	
-	
-	private void activarCargando(){
+
+	private void activarCargando() {
 		scene.setCursor(Cursor.WAIT);
-		
+
 	}
-	
-	
-	private void desactivarCargando(){
-		
+
+	private void desactivarCargando() {
+
 		scene.setCursor(Cursor.DEFAULT);
-		
-		
+
 	}
-	
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
-		
-		
-		
+
 		cargando.setVisible(false);
 		items = FXCollections.observableArrayList();
 		fxmlListaServer.setItems(items);
@@ -92,7 +91,7 @@ public class SyncroController implements Initializable {
 			@Override
 			public void handle(ActionEvent event) {
 				scene.setCursor(Cursor.WAIT);
-				
+
 				String[] listarDirectorio = snippletService.listarDirectorio();
 				removerItemsLista();
 
@@ -172,6 +171,77 @@ public class SyncroController implements Initializable {
 
 		});
 
+		borrarServer.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				activarCargando();
+				String[] listar_server = null;
+				removerItemsLista();
+				try {
+					listar_server = listar_server();
+
+					for (String string : listar_server) {
+						items.add(string);
+
+					}
+					upload.setDisable(true);
+					download.setDisable(false);
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				desactivarCargando();
+
+			}
+		});
+
+		borrar.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				String categoria = fxmlListaServer.getSelectionModel().getSelectedItem();
+				try {
+					borrarFromServer(categoria);
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "error al elinimar la categoria");
+					
+					e.printStackTrace();
+				}
+
+			}
+		});
+
+	}
+
+	public void borrarFromServer(String categoria) throws JsonGenerationException, JsonMappingException, IOException{
+		
+		
+		String url = configurationService.getUri() + "deleteCategory";
+		CategoriaDTO categoriaDTO = new CategoriaDTO();
+		categoriaDTO.setNombre(categoria);
+		SendDTO send = new SendDTO();
+		UserConfiguration userConfiguration = configurationService.getUserConfiguration();
+		send.setUsername(userConfiguration.getUsername());
+		send.setCategoriaDTO(categoriaDTO);
+		
+		
+		MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+		OkHttpClient client = new OkHttpClient();
+		ObjectMapper mapper = new ObjectMapper();
+		String writeValueAsString = mapper.writeValueAsString(send);
+		System.out.println(writeValueAsString);
+		RequestBody body = RequestBody.create(JSON, writeValueAsString);
+
+		Request request = new Request.Builder().url(url).post(body).build();
+		okhttp3.Response response = client.newCall(request).execute();
+
+		String responseBody = response.body().string();
+
+		
+		
 	}
 
 	public CategoriaDTO getFromServer(String filename)
@@ -180,13 +250,12 @@ public class SyncroController implements Initializable {
 		String url = configurationService.getUri() + "returnCategory";
 		CategoriaDTO recuperarGuardado = new CategoriaDTO();
 		recuperarGuardado.setNombre(filename);
-		
+
 		SendDTO send = new SendDTO();
 		UserConfiguration userConfiguration = configurationService.getUserConfiguration();
 		send.setUsername(userConfiguration.getUsername());
 		send.setCategoriaDTO(recuperarGuardado);
-		
-		
+
 		MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
 		OkHttpClient client = new OkHttpClient();
@@ -211,31 +280,30 @@ public class SyncroController implements Initializable {
 		String url = configurationService.getUri() + "guardarCategoria";
 		CategoriaDTO recuperarGuardado = persistencia.recuperarGuardado(filename);
 		UserConfiguration userConfiguration = configurationService.getUserConfiguration();
-		SendDTO send  = new SendDTO();
+		SendDTO send = new SendDTO();
 		send.setUsername(userConfiguration.getUsername());
 		send.setPassword(userConfiguration.getPassword());
 		send.setCategoriaDTO(recuperarGuardado);
-		
+
 		MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-		
-		if(recuperarGuardado != null){
-		OkHttpClient client = new OkHttpClient();
-		ObjectMapper mapper = new ObjectMapper();
-		String writeValueAsString = mapper.writeValueAsString(send);
-		System.out.println(writeValueAsString);
-		RequestBody body = RequestBody.create(JSON, writeValueAsString);
+		if (recuperarGuardado != null) {
+			OkHttpClient client = new OkHttpClient();
+			ObjectMapper mapper = new ObjectMapper();
+			String writeValueAsString = mapper.writeValueAsString(send);
+			System.out.println(writeValueAsString);
+			RequestBody body = RequestBody.create(JSON, writeValueAsString);
 
-		Request request = new Request.Builder().url(url).post(body).build();
-		okhttp3.Response response = client.newCall(request).execute();
+			Request request = new Request.Builder().url(url).post(body).build();
+			okhttp3.Response response = client.newCall(request).execute();
 
-		String responseBody = response.body().string();
-		JOptionPane.showMessageDialog(null, responseBody);
-		return responseBody;
-		}else {
+			String responseBody = response.body().string();
+			JOptionPane.showMessageDialog(null, responseBody);
+			return responseBody;
+		} else {
 			JOptionPane.showMessageDialog(null, "Este archivo no contiene snipplets!");
 			return "";
-			
+
 		}
 	}
 
@@ -244,15 +312,15 @@ public class SyncroController implements Initializable {
 		String url = configurationService.getUri() + "listarServer";
 
 		MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-		
+
 		UserConfiguration userConfiguration = configurationService.getUserConfiguration();
-		SendDTO send  = new SendDTO();
+		SendDTO send = new SendDTO();
 		send.setUsername(userConfiguration.getUsername());
 		send.setPassword(userConfiguration.getPassword());
-		
+
 		OkHttpClient client = new OkHttpClient();
 		ObjectMapper mapper = new ObjectMapper();
-		RequestBody body = RequestBody.create(JSON,mapper.writeValueAsString(send));
+		RequestBody body = RequestBody.create(JSON, mapper.writeValueAsString(send));
 
 		Request request = new Request.Builder().url(url).post(body).build();
 		okhttp3.Response response = client.newCall(request).execute();
@@ -276,7 +344,5 @@ public class SyncroController implements Initializable {
 		}
 
 	}
-
-
 
 }
