@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
 
@@ -223,21 +224,33 @@ public class SnippletService {
 		
 	}
 	
-	public List<Snipplet> searchAll(String palabra){
+	public List<Snipplet> searchAll(String palabras){
 		
 		
 		List<Snipplet> snipplet = new LinkedList<Snipplet>();
+		
+		List<String> arrayOfWords = getArrayOfWords(palabras);
+		
+				
 		
 		for (CategoriaDTO categoriaDTO : categorias) {
 			
 			
 			List<Snipplet> snipplets = categoriaDTO.getSnipplets();
-			
+			boolean buscarTexto=false;
 			for (Snipplet snipplet2 : snipplets) {
 				
-				boolean buscarTexto = snipplet2.buscarTexto(palabra);
-				if(buscarTexto)
+				for (String palabra : arrayOfWords) {
+					buscarTexto = snipplet2.buscarTexto(palabra);	
+					if(buscarTexto)
+						 break;
+				}
+				
+				if(buscarTexto){
 					snipplet.add(snipplet2);
+					buscarTexto=false;
+				}
+				
 				
 			}
 			
@@ -251,6 +264,20 @@ public class SnippletService {
 	
 	
 	
+	private List<String> getArrayOfWords(String palabra) {
+		StringTokenizer strtk = new StringTokenizer(palabra, " ");
+		
+		List<String> lista = new LinkedList<String>();
+		
+		while (strtk.hasMoreElements()) {
+			lista.add((String) strtk.nextElement());
+			
+		}
+		
+		
+		return lista;
+	}
+
 	public void guardarCopiaSourceSistemas(SourceObject[] fromServer) {
 
 		File file = new File(configurationService.getFileConfiguration().getConfigurationPrefix()+"mensajesSource");

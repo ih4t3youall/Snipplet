@@ -31,7 +31,7 @@ public class Snipplet implements Serializable {
 
 	public boolean buscarTexto(String palabra) {
 
-		if (contenido.indexOf(palabra) != -1 || titulo.indexOf(palabra) != -1) {
+		if (contenido.trim().toLowerCase().indexOf(palabra.trim().toLowerCase()) != -1 || titulo.trim().toLowerCase().indexOf(palabra.trim().toLowerCase()) != -1) {
 
 			return true;
 		} else {
