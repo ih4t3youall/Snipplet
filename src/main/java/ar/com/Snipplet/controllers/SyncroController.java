@@ -102,6 +102,7 @@ public class SyncroController implements Initializable {
 				}
 				download.setDisable(true);
 				upload.setDisable(false);
+				borrar.setDisable(true);
 				desactivarCargando();
 			}
 		});
@@ -161,6 +162,7 @@ public class SyncroController implements Initializable {
 					}
 					upload.setDisable(true);
 					download.setDisable(false);
+					borrar.setDisable(true);
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -186,7 +188,8 @@ public class SyncroController implements Initializable {
 
 					}
 					upload.setDisable(true);
-					download.setDisable(false);
+					download.setDisable(true);
+					borrar.setDisable(false);
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
