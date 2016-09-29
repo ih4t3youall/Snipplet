@@ -14,7 +14,7 @@ public class InicioKeyHandler implements EventHandler<KeyEvent> {
 
 	@Override
 	public void handle(KeyEvent key) {
-		System.out.println(key.getCode());
+		
 		
 		if(key.getCode().toString().equals("F3")){
 			inicioController.search();
