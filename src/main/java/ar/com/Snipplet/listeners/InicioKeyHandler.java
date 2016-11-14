@@ -25,6 +25,10 @@ public class InicioKeyHandler implements EventHandler<KeyEvent> {
 			inicioController.refreshList();
 
 		}
+		if(key.getCode().toString().equals("F4")){
+			inicioController.searchCategory();
+
+		}
 		
 		
 	}

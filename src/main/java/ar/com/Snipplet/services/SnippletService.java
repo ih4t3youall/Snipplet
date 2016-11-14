@@ -314,7 +314,7 @@ public class SnippletService {
 			
 			
 			for (Snipplet snipplet : categoriaDTO.getSnipplets()) {
-				
+				snipplet.setNombreCategoria(categoriaDTO.getNombre());
 				snipplets.add(snipplet);
 				
 				

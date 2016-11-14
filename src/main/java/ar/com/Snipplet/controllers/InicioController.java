@@ -2,8 +2,10 @@ package ar.com.Snipplet.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
 
@@ -30,6 +32,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import sun.util.locale.StringTokenIterator;
 
 public class InicioController implements Initializable {
 
@@ -53,23 +56,20 @@ public class InicioController implements Initializable {
 
 	@FXML
 	private Button refresh;
-	
+
 	@FXML
 	private Button botonReset;
 
 	@FXML
 	private Menu fxmlEdit;
-	
 
 	private String id;
 
 	private VBox vbox = (VBox) SpringContext.getContext().getBean("vbox");
 
-	private SnippletService snippletService = (SnippletService) SpringContext
-			.getContext().getBean("snippletService");
+	private SnippletService snippletService = (SnippletService) SpringContext.getContext().getBean("snippletService");
 
-	private SnippletsHelper snippletHelper = (SnippletsHelper) SpringContext
-			.getContext().getBean("snippletHelper");
+	private SnippletsHelper snippletHelper = (SnippletsHelper) SpringContext.getContext().getBean("snippletHelper");
 
 	protected ObservableList<String> items;
 
@@ -82,23 +82,20 @@ public class InicioController implements Initializable {
 		configure();
 		items = FXCollections.observableArrayList();
 		fxmlListView.setItems(items);
-		
+
 		refreshList();
-		
-		
 
-		fxmlListView.getSelectionModel().selectedItemProperty()
-				.addListener(new ChangeListener<String>() {
-					public void changed(ObservableValue<? extends String> observable,	String oldValue, String newValue) {
-						cargarPorCategoria(newValue);
+		fxmlListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				cargarPorCategoria(newValue);
 
-					}
-				});
+			}
+		});
 
 	}
 
 	public void refreshList() {
-		//scene.setOnKeyPressed(new InicioKeyHandler(this));
+		// scene.setOnKeyPressed(new InicioKeyHandler(this));
 		snippletService.cargarArchivos();
 		removerItemsLista();
 		for (CategoriaDTO categoria : snippletService.getCategorias()) {
@@ -107,8 +104,19 @@ public class InicioController implements Initializable {
 		}
 
 	}
+	private void updateList(List<CategoriaDTO> categoriasDTO) {
+
+		snippletService.cargarArchivos();
+		removerItemsLista();
+		for (CategoriaDTO categoria : categoriasDTO) {
+
+			items.add(categoria.getNombre());
+		}
+
+	}
 	
-	public void requestFocus(){
+
+	public void requestFocus() {
 		fxmlListView.requestFocus();
 	}
 
@@ -152,8 +160,7 @@ public class InicioController implements Initializable {
 			public void handle(ActionEvent event) {
 				AnchorPane root = null;
 				try {
-					String categoria = fxmlListView.getSelectionModel()
-							.getSelectedItem();
+					String categoria = fxmlListView.getSelectionModel().getSelectedItem();
 					root = snippletHelper.getEmptyPanel(categoria);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -169,8 +176,7 @@ public class InicioController implements Initializable {
 			@Override
 			public void handle(ActionEvent event) {
 
-				String nombreCategoria = fxmlListView.getSelectionModel()
-						.getSelectedItem();
+				String nombreCategoria = fxmlListView.getSelectionModel().getSelectedItem();
 				items.remove(nombreCategoria);
 				snippletService.deleteCategory(nombreCategoria);
 
@@ -190,7 +196,6 @@ public class InicioController implements Initializable {
 		fxmlMenu.getItems().add(guardarEnLaNube);
 		fxmlMenu.getItems().add(configuracion);
 
-
 		configuracion.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -198,8 +203,7 @@ public class InicioController implements Initializable {
 
 				FXMLLoader loader = new FXMLLoader();
 				Stage secondaryStage = new Stage();
-				loader.setLocation(getClass().getResource(
-						"/views/Configuracion.fxml"));
+				loader.setLocation(getClass().getResource("/views/Configuracion.fxml"));
 				AnchorPane root;
 				try {
 					root = (AnchorPane) loader.load();
@@ -225,13 +229,11 @@ public class InicioController implements Initializable {
 
 				FXMLLoader loader = new FXMLLoader();
 				Stage secondaryStage = new Stage();
-				loader.setLocation(getClass().getResource(
-						"/views/ServerSyncro.fxml"));
+				loader.setLocation(getClass().getResource("/views/ServerSyncro.fxml"));
 				AnchorPane root;
 				try {
 					root = (AnchorPane) loader.load();
-					SyncroController controller = (SyncroController) loader
-							.getController();
+					SyncroController controller = (SyncroController) loader.getController();
 					Scene scene = new Scene(root);
 					controller.setScene(scene);
 
@@ -248,77 +250,72 @@ public class InicioController implements Initializable {
 			}
 		});
 
-		agregarCategoria
-				.setOnAction(new javafx.event.EventHandler<ActionEvent>() {
+		agregarCategoria.setOnAction(new javafx.event.EventHandler<ActionEvent>() {
 
-					@Override
-					public void handle(ActionEvent event) {
+			@Override
+			public void handle(ActionEvent event) {
 
-						String nuevaCategoria = JOptionPane
-								.showInputDialog("Ingrese nombre categoria");
-						if (!nuevaCategoria.equals("")) {
+				String nuevaCategoria = JOptionPane.showInputDialog("Ingrese nombre categoria");
+				if (!nuevaCategoria.equals("")) {
 
-							snippletService.crearNuevoSnipplet(nuevaCategoria);
-							boolean flag = true;
-							for (String string : items) {
-								if (string.equals(nuevaCategoria)) {
-									flag = false;
-								}
-
-							}
-							if (flag) {
-								items.add(nuevaCategoria);
-							} else {
-
-								JOptionPane.showMessageDialog(null,
-										"el nombre de categoria ya existe!");
-							}
-
-						} else {
-
-							JOptionPane.showMessageDialog(null,
-									"Error: no puede ser vacio.");
-
+					snippletService.crearNuevoSnipplet(nuevaCategoria);
+					boolean flag = true;
+					for (String string : items) {
+						if (string.equals(nuevaCategoria)) {
+							flag = false;
 						}
 
 					}
-				});
+					if (flag) {
+						items.add(nuevaCategoria);
+					} else {
+
+						JOptionPane.showMessageDialog(null, "el nombre de categoria ya existe!");
+					}
+
+				} else {
+
+					JOptionPane.showMessageDialog(null, "Error: no puede ser vacio.");
+
+				}
+
+			}
+		});
 
 		botonBuscar.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-			search();
+				search();
 
 			}
 		});
-		
+
 		botonReset.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				
+
 				String categoria = fxmlListView.getSelectionModel().getSelectedItem();
-				
+
 				cargarPorCategoria(categoria);
 
 			}
 		});
 
 	}
-	
-	//es public porque tambien accede desde el keylistener
-	public void search(){
+
+	// es public porque tambien accede desde el keylistener
+	public void search() {
 		String palabraABuscar = JOptionPane.showInputDialog("Buscar:");
-		if(palabraABuscar != null){
-		String categoria = fxmlListView.getSelectionModel().getSelectedItem();
-		List<Snipplet> buscarEnCategorias = snippletService.searchAll(palabraABuscar);
-		mostrarSnippletsDeBusqueda(buscarEnCategorias,categoria);
+		if (palabraABuscar != null) {
+			String categoria = fxmlListView.getSelectionModel().getSelectedItem();
+			List<Snipplet> buscarEnCategorias = snippletService.searchAll(palabraABuscar);
+			mostrarSnippletsDeBusqueda(buscarEnCategorias, categoria);
 		}
 	}
-	
-	
-	private void cargarPorCategoria(String categoria){
+
+	private void cargarPorCategoria(String categoria) {
 		List<AnchorPane> panels = snippletService.loadSnippletsPorCategoria(categoria);
 		activarButtons();
 		int size = vbox.getChildren().size();
@@ -332,14 +329,13 @@ public class InicioController implements Initializable {
 			for (AnchorPane anchorPane : panels) {
 				vbox.getChildren().add(0, anchorPane);
 			}
-			
+
 		}
-		
+
 	}
 
-	private void mostrarSnippletsDeBusqueda(List<Snipplet> snipplets,String categoria) {
+	private void mostrarSnippletsDeBusqueda(List<Snipplet> snipplets, String categoria) {
 
-		
 		List<AnchorPane> panels = snippletService.loadSnippletsForSearch(snipplets);
 		int size = vbox.getChildren().size();
 		for (int i = 0; i < size; i++) {
@@ -353,7 +349,7 @@ public class InicioController implements Initializable {
 				vbox.getChildren().add(0, anchorPane);
 			}
 		}
-		
+
 	}
 
 	private void activarButtons() {
@@ -371,8 +367,40 @@ public class InicioController implements Initializable {
 
 	public void setListener(Stage primaryStage) {
 		this.stage = primaryStage;
-		
+
 	}
 
+	public void searchCategory() {
+
+		String palabraABuscar = JOptionPane.showInputDialog("Buscar:");
+		List<CategoriaDTO> categoriasBuscadas = new LinkedList<CategoriaDTO>();
+		if (palabraABuscar != null) {
+			
+			List<CategoriaDTO> categorias = snippletService.getCategorias();
+			
+			StringTokenizer st = new StringTokenizer(palabraABuscar);
+			
+			while(st.hasMoreTokens()){
+				
+				String nextToken = st.nextToken();
+				
+				for (CategoriaDTO categoriaDTO : categorias) {
+					if(categoriaDTO.getNombre().trim().toLowerCase().indexOf(nextToken.toLowerCase()) != -1){
+						categoriasBuscadas.add(categoriaDTO);
+						
+					}
+				}
+				
+				
+			}
+			
+			
+			updateList(categoriasBuscadas);
+			
+			
+		}
+		
+
+	}
 
 }
