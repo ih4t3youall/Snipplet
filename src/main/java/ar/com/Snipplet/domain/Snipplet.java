@@ -1,5 +1,8 @@
 package ar.com.Snipplet.domain;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
@@ -47,17 +50,50 @@ public class Snipplet implements Serializable {
 		
 	}
 	
-	public boolean buscarTexto(String palabra) {
+	public boolean buscarTexto(String palabrasAUX ){
 
-		if (contenido.trim().toLowerCase().indexOf(palabra.trim().toLowerCase()) != -1 || titulo.trim().toLowerCase().indexOf(palabra.trim().toLowerCase()) != -1) {
+        StringTokenizer token = new StringTokenizer(palabrasAUX);
+        List<String> palabras = new LinkedList<String>();
 
-			return true;
-		} else {
+        while(token.hasMoreTokens()){
+            palabras.add(token.nextToken());
+        }
 
-			return false;
 
-		}
 
-	}
+        int cantidad = palabras.size();
+        int contador = 0;
+
+        for (String palabra :palabras ) {
+
+            boolean flag = false;
+            if(contenido.trim().toLowerCase().indexOf(palabra) != -1){
+                flag = true;
+
+            }
+            if(titulo.trim().toLowerCase().indexOf(palabra) != -1){
+                flag = true;
+
+            }
+
+            if(flag){
+                contador++;
+                flag = false;
+            }
+
+
+
+
+        }
+
+        if(contador == cantidad){
+            return true;
+        }else{
+            return false;
+        }
+
+
+    }
+
 
 }

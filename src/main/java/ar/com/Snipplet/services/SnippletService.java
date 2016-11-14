@@ -287,30 +287,35 @@ public class SnippletService {
 	public List<Snipplet> searchAll(String palabras){
 		
 		
-		List<Snipplet> snipplet = new LinkedList<Snipplet>();
+		List<Snipplet> snippletsSearch = new LinkedList<Snipplet>();
 		
-		List<String> arrayOfWords = getArrayOfWords(palabras);
+		List<Snipplet> allSnipplets = getAllSnipplets();
 		
+		for (Snipplet allSnipplet : allSnipplets) {
+			
+			if(allSnipplet.buscarTexto(palabras)){
+				snippletsSearch.add(allSnipplet);
 				
+			}
+			
+		}
 		
+						
+		return snippletsSearch;
+		
+		
+	}
+	
+	
+	public List<Snipplet> getAllSnipplets(){
+		
+		List<Snipplet> snipplets = new LinkedList<Snipplet>();
 		for (CategoriaDTO categoriaDTO : categorias) {
 			
 			
-			List<Snipplet> snipplets = categoriaDTO.getSnipplets();
-			boolean buscarTexto=false;
-			for (Snipplet snipplet2 : snipplets) {
+			for (Snipplet snipplet : categoriaDTO.getSnipplets()) {
 				
-				for (String palabra : arrayOfWords) {
-					buscarTexto = snipplet2.buscarTexto(palabra);	
-					if(buscarTexto)
-						 break;
-				}
-				
-				if(buscarTexto){
-					snipplet2.setNombreCategoria(categoriaDTO.getNombre());
-					snipplet.add(snipplet2);
-					buscarTexto=false;
-				}
+				snipplets.add(snipplet);
 				
 				
 			}
@@ -318,26 +323,13 @@ public class SnippletService {
 			
 		}
 		
-		return snipplet;
+		return snipplets;
+		
+		
 		
 		
 	}
-	
-	
-	
-	private List<String> getArrayOfWords(String palabra) {
-		StringTokenizer strtk = new StringTokenizer(palabra, " ");
-		
-		List<String> lista = new LinkedList<String>();
-		
-		while (strtk.hasMoreElements()) {
-			lista.add((String) strtk.nextElement());
-			
-		}
-		
-		
-		return lista;
-	}
+
 
 	public void guardarCopiaSourceSistemas(SourceObject[] fromServer) {
 
