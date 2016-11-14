@@ -340,7 +340,7 @@ public class InicioController implements Initializable {
 	private void mostrarSnippletsDeBusqueda(List<Snipplet> snipplets,String categoria) {
 
 		
-		List<AnchorPane> panels = snippletService.loadSnipplets(snipplets,categoria);
+		List<AnchorPane> panels = snippletService.loadSnippletsForSearch(snipplets);
 		int size = vbox.getChildren().size();
 		for (int i = 0; i < size; i++) {
 			vbox.getChildren().remove(0);

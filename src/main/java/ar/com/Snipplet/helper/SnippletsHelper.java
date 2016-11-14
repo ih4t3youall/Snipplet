@@ -68,7 +68,7 @@ public class SnippletsHelper {
 	}
 	
 	
-	public  AnchorPane getPopulatedPanel(String categoria,Snipplet snipplet) throws IOException {
+	public  AnchorPane getPopulatedPanel(String categoria,Snipplet snipplet,boolean buscar) throws IOException {
 
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/views/panel.fxml"));
@@ -77,6 +77,7 @@ public class SnippletsHelper {
 		load.setId("numero"+contador);
 		PanelController controller =(PanelController) loader.getController();
 		controller.setId("numero"+contador);
+		controller.setBuscar(buscar);
 		controller.setCategoria(categoria);
 		controller.getTextArea().setText(snipplet.getContenido());
 		controller.getTitulo().setText(snipplet.getTitulo());

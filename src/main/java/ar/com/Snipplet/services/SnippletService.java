@@ -14,6 +14,8 @@ import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
 
+import com.sun.jmx.snmp.agent.SnmpTableEntryNotification;
+
 import ar.com.Snipplet.domain.Snipplet;
 import ar.com.Snipplet.domain.SourceObject;
 import ar.com.Snipplet.dto.CategoriaDTO;
@@ -28,6 +30,7 @@ public class SnippletService {
 
 	private Persistencia persistencia;
 
+	//snipplets en memoria
 	private List<CategoriaDTO> categorias;
 
 	private SnippletsHelper snippletHelper;
@@ -112,7 +115,7 @@ public class SnippletService {
 			if (snippletByCategory != null) {
 				for (Snipplet snipplet : snippletByCategory) {
 					populatedPanel = new AnchorPane();
-					populatedPanel = snippletHelper.getPopulatedPanel(categoria, snipplet);
+					populatedPanel = snippletHelper.getPopulatedPanel(categoria, snipplet,false);
 					panels.add(populatedPanel);
 
 				}
@@ -136,7 +139,8 @@ public class SnippletService {
 			if (snippletByCategory != null) {
 				for (Snipplet snipplet : snippletByCategory) {
 					populatedPanel = new AnchorPane();
-					populatedPanel = snippletHelper.getPopulatedPanel(categoria, snipplet);
+					
+					populatedPanel = snippletHelper.getPopulatedPanel(categoria, snipplet,false);
 					panels.add(populatedPanel);
 
 				}
@@ -149,6 +153,32 @@ public class SnippletService {
 		}
 		return panels;
 
+	}
+	
+	
+	public List<AnchorPane> loadSnippletsForSearch(List<Snipplet> snippletByCategory){
+		
+		AnchorPane populatedPanel = null;
+
+		List<AnchorPane> panels = new ArrayList<AnchorPane>();
+		try {
+			if (snippletByCategory != null) {
+				for (Snipplet snipplet : snippletByCategory) {
+					populatedPanel = new AnchorPane();
+					snipplet.setNombreCategoria(snipplet.getNombreCategoria());
+					populatedPanel = snippletHelper.getPopulatedPanel(snipplet.getNombreCategoria(), snipplet,true);
+					panels.add(populatedPanel);
+
+				}
+
+			} else {
+				return null;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return panels;
+		
 	}
 	
 
@@ -202,8 +232,38 @@ public class SnippletService {
 
 	public void agregarSnipplet(Snipplet snipplet, String categoria) {
 		CategoriaDTO categoriaDTO = getCategoriaDTO(categoria);
+		categoriaDTO.setSnipplets(getSnippletByCategory(categoria));
 		categoriaDTO.addSnipplet(snipplet);
 
+	}
+	
+	
+	public void snippletRepetido(Snipplet snipplet){
+		int index =0;
+		boolean flag =  false;
+		List<Snipplet> snipplets = getSnippletByCategory(snipplet.getNombreCategoria());
+		
+		for(int i = 0 ; i < snipplets.size();i++){
+			
+			if(snipplets.get(i).getTitulo().equals(snipplet.getTitulo())){
+				index = i;
+				flag = true;
+				break;
+			}
+			
+		}
+		
+		if(flag){
+			
+			snipplets.remove(index);
+			snipplets.add(snipplet);
+			
+			
+		} 
+		
+		
+		
+		
 	}
 	
 	public List<Snipplet> searchInCategory(String palabra,String categoria){
@@ -247,6 +307,7 @@ public class SnippletService {
 				}
 				
 				if(buscarTexto){
+					snipplet2.setNombreCategoria(categoriaDTO.getNombre());
 					snipplet.add(snipplet2);
 					buscarTexto=false;
 				}

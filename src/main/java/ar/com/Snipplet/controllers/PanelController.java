@@ -41,6 +41,8 @@ public class PanelController implements Initializable {
 	private String id;
 
 	private String categoria;
+	
+	private boolean buscar=false;
 
 	private VBox vbox = (VBox) SpringContext.getContext().getBean("vbox");
 
@@ -68,6 +70,22 @@ public class PanelController implements Initializable {
 			@Override
 			public void handle(ActionEvent event) {
 
+				if(buscar){
+					
+					Snipplet snipplet = new Snipplet();
+					snipplet.setTitulo(titulo.getText());
+					snipplet.setContenido(textArea.getText());
+					snipplet.setNombreCategoria(categoria);
+					snnipletService.snippletRepetido(snipplet);
+					try {
+						snnipletService.guardarCategoria("", categoria);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					
+				}else{
 				String text = textArea.getText();
 				ObservableList<Node> list = vbox.getChildren();
 				// elimino todos los sniplets de la categoria seleccionada
@@ -78,14 +96,15 @@ public class PanelController implements Initializable {
 					ObservableList<Node> node = anchorPane.getChildren();
 					TextArea textArea = (TextArea) node.get(1);
 					TextField textField = (TextField) node.get(4);
-
+					
 					String titulo = textField.getText();
 					String contenido = textArea.getText();
 
 					Snipplet snipplet = new Snipplet();
 					snipplet.setTitulo(titulo);
 					snipplet.setContenido(contenido);
-
+					snipplet.setNombreCategoria(categoria);
+					
 					snnipletService.agregarSnipplet(snipplet, categoria);
 
 				}
@@ -95,7 +114,7 @@ public class PanelController implements Initializable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
+				}
 			}
 		});
 
@@ -142,6 +161,13 @@ public class PanelController implements Initializable {
 	public void setTitulo(TextField titulo) {
 		this.titulo = titulo;
 	}
+	
+	public void setBuscar(boolean buscar){
+		
+		this.buscar=buscar;
+		
+	}
+	
 
 
 }
