@@ -227,6 +227,7 @@ public class SyncroController implements Initializable {
 		SendDTO send = new SendDTO();
 		UserConfiguration userConfiguration = configurationService.getUserConfiguration();
 		send.setUsername(userConfiguration.getUsername());
+		send.setPassword(userConfiguration.getPassword());
 		send.setCategoriaDTO(categoriaDTO);
 		
 		
@@ -257,6 +258,7 @@ public class SyncroController implements Initializable {
 		SendDTO send = new SendDTO();
 		UserConfiguration userConfiguration = configurationService.getUserConfiguration();
 		send.setUsername(userConfiguration.getUsername());
+		send.setPassword(userConfiguration.getPassword());
 		send.setCategoriaDTO(recuperarGuardado);
 
 		MediaType JSON = MediaType.parse("application/json; charset=utf-8");

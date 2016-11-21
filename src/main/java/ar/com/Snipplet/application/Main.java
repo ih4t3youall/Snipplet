@@ -32,7 +32,7 @@ public class Main extends Application {
 			scene.setOnKeyPressed(new InicioKeyHandler(controller));
 
             primaryStage.setResizable(false);
-            primaryStage.setTitle("Snipplet! v1.2");
+            primaryStage.setTitle("Snipplet! v1.3");
             InputStream resourceAsStream = getClass().getResourceAsStream("../resources/icono.png");
             if(resourceAsStream != null){
             primaryStage.getIcons().add(new Image(resourceAsStream));
