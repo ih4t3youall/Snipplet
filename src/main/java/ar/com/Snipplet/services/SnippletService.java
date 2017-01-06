@@ -430,37 +430,90 @@ public class SnippletService {
 
 	}
 
-	public void actualizarCategoria(CategoriaDTO categoriaDTO) {
+	public void actualizarCategoria(CategoriaDTO categoriaDTOFromServer) {
 
-		boolean exists = persistencia.existeArchivo(categoriaDTO.getNombre());
-
+		boolean exists = persistencia.existeArchivo(categoriaDTOFromServer.getNombre());
+		CategoriaDTO categoriaLocal=null;
 		if (exists) {
-			CategoriaDTO categoriaVieja = getCategoriaDTO(categoriaDTO.getNombre());
+			categoriaLocal = getCategoriaDTO(categoriaDTOFromServer.getNombre());
 
-			List<Snipplet> oldSnipplets = categoriaVieja.getSnipplets();
-			List<Snipplet> snipplets = categoriaDTO.getSnipplets();
-
-			for (Snipplet snipplet : oldSnipplets) {
-
-				if (!existeEnLista(snipplet.getTitulo(), snipplets)) {
-					// no existe
-					snipplets.add(snipplet);
-
+			List<Snipplet> localSnipplets = categoriaLocal.getSnipplets();
+			List<Snipplet> snippletsfromServer = categoriaDTOFromServer.getSnipplets();
+			//sfs snipplet from server
+			List<Snipplet> aAgregar = new LinkedList<Snipplet>();
+			for (Snipplet sfs : snippletsfromServer) {
+				
+				//local snipplet
+				for (Snipplet ls : localSnipplets) {
+					if(sfs.getTitulo().equals(ls.getTitulo())){
+						
+						if(!sfs.getContenido().equals(ls.getContenido())){
+							
+							int dialogButton = JOptionPane.YES_NO_OPTION;
+							int dialogResult = JOptionPane.showConfirmDialog (null,"El snipplet: "+ ls.getTitulo()+" es distinto al del server, dejas el del server?","Warning",dialogButton);
+							if(dialogResult == JOptionPane.YES_OPTION){
+							  aAgregar.add(sfs);
+							}
+							
+						}
+						
+					}
+					
 				}
-
+				
+				if(aAgregar.size() > 0){
+					for (Snipplet snipplet : aAgregar) {
+						
+						deleteSnippletFromList(localSnipplets,snipplet);
+					}
+					
+					for (Snipplet snipplet : aAgregar) {
+						
+						localSnipplets.add(snipplet);
+						
+					}
+					
+					
+				}
+				
+				
 			}
+
 
 		}
 
 		try {
-			persistencia.eliminarYCrearArchivo(categoriaDTO.getNombre());
-			errorMultiplesGuardados(categoriaDTO);
+			if(categoriaLocal == null){
+				categoriaLocal = categoriaDTOFromServer;
+			}
+			persistencia.eliminarYCrearArchivo(categoriaLocal.getNombre());
+			errorMultiplesGuardados(categoriaLocal);
 
-			persistencia.guardar(categoriaDTO, categoriaDTO.getNombre());
+			persistencia.guardar(categoriaLocal, categoriaLocal.getNombre());
+			
 		} catch (IOException e) {
 			System.out.println("error al guardar");
 		}
 
+	}
+
+	private void deleteSnippletFromList(List<Snipplet> localSnipplets, Snipplet victim) {
+
+		int cont = 0;
+		int victimNumber = 0;
+		for (Snipplet snipplet : localSnipplets) {
+			if(snipplet.getTitulo().equals(victim.getTitulo())){
+				victimNumber = cont;
+				
+			}
+			cont++;
+		}
+		
+		localSnipplets.remove(victimNumber);
+		
+		
+		
+		
 	}
 
 	public void deleteCategory(String filename) {

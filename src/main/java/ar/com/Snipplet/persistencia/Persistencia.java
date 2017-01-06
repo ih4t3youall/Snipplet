@@ -240,6 +240,7 @@ public class Persistencia {
 
 	public void eliminarYCrearArchivo(String filename) throws IOException {
 		File file = new File(prefix + filename);
+		if(file.exists())
 		file.delete();
 		file.createNewFile();
 	}
