@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
+import ar.com.Snipplet.handlers.UploadHandler;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -125,26 +126,27 @@ public class SyncroController implements Initializable {
 			}
 		});
 
-		download.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				activarCargando();
-				CategoriaDTO fromServer;
-				try {
-
-					String filename = fxmlListaServer.getSelectionModel().getSelectedItem();
-
-					fromServer = getFromServer(filename);
-					snippletService.actualizarCategoria(fromServer);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				desactivarCargando();
-
-			}
-		});
+		download.setOnAction(new UploadHandler(fxmlListaServer));
+//		download.setOnAction(new EventHandler<ActionEvent>() {
+//
+//			@Override
+//			public void handle(ActionEvent arg0) {
+//				activarCargando();
+//				CategoriaDTO fromServer;
+//				try {
+//
+//					String filename = fxmlListaServer.getSelectionModel().getSelectedItem();
+//
+//					fromServer = getFromServer(filename);
+//					snippletService.actualizarCategoria(fromServer);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				desactivarCargando();
+//
+//			}
+//		});
 
 		listarServer.setOnAction(new EventHandler<ActionEvent>() {
 

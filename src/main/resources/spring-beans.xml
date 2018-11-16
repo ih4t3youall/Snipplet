@@ -18,6 +18,11 @@
 <bean id="configurationService" class="ar.com.Snipplet.services.ConfigurationService">
 <property name="persistencia" ref="persistencia"></property>
 </bean>
+	<bean id="serverConnection" class="ar.com.Snipplet.serverconection.ServerConnection">
+		<property name="persistencia" ref="persistencia"></property>
+		<property name="configurationService" ref="configurationService"></property>
+
+	</bean>
 
 <bean id="snippletService" class="ar.com.Snipplet.services.SnippletService">
 <property name="persistencia" ref="persistencia"></property>
