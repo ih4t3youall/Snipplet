@@ -276,9 +276,10 @@ public class SyncroController implements Initializable {
 
 		String responseBody = response.body().string();
 
-		CategoriaDTO categoriaDTO = mapper.readValue(responseBody, CategoriaDTO.class);
+		System.out.println(responseBody);
+		SendDTO sendDTO = mapper.readValue(responseBody, SendDTO.class);
 
-		return categoriaDTO;
+		return sendDTO.getCategoriaDTO();
 
 	}
 
