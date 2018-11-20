@@ -4,8 +4,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import ar.com.Snipplet.context.SpringContext;
-import ar.com.Snipplet.domain.Snipplet;
 import ar.com.Snipplet.services.SnippletService;
+import ar.com.commons.send.dto.SnippletDTO;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -72,7 +72,7 @@ public class PanelController implements Initializable {
 
 				if(buscar){
 					
-					Snipplet snipplet = new Snipplet();
+					SnippletDTO snipplet = new SnippletDTO();
 					snipplet.setTitulo(titulo.getText());
 					snipplet.setContenido(textArea.getText());
 					snipplet.setNombreCategoria(categoria);
@@ -100,7 +100,7 @@ public class PanelController implements Initializable {
 					String titulo = textField.getText();
 					String contenido = textArea.getText();
 
-					Snipplet snipplet = new Snipplet();
+					SnippletDTO snipplet = new SnippletDTO();
 					snipplet.setTitulo(titulo);
 					snipplet.setContenido(contenido);
 					snipplet.setNombreCategoria(categoria);

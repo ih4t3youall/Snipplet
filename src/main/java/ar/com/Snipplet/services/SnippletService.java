@@ -10,17 +10,15 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
 
-import com.sun.jmx.snmp.agent.SnmpTableEntryNotification;
+import ar.com.commons.send.dto.CategoriaDTO;
 
-import ar.com.Snipplet.domain.Snipplet;
 import ar.com.Snipplet.domain.SourceObject;
-import ar.com.Snipplet.dto.CategoriaDTO;
 import ar.com.Snipplet.helper.SnippletsHelper;
 import ar.com.Snipplet.persistencia.Persistencia;
+import ar.com.commons.send.dto.SnippletDTO;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
@@ -80,7 +78,7 @@ public class SnippletService {
 		
 		CategoriaDTO searchCategory = searchCategory(categoria);
 		
-		List<Snipplet> snipplets = searchCategory.getSnipplets();
+		List<SnippletDTO> snipplets = searchCategory.getSnipplets();
 		
 		if (snipplets !=  null )
 			snipplets.clear();
@@ -111,9 +109,9 @@ public class SnippletService {
 
 		List<AnchorPane> panels = new ArrayList<AnchorPane>();
 		try {
-			List<Snipplet> snippletByCategory = getSnippletByCategory(categoria);
+			List<SnippletDTO> snippletByCategory = getSnippletByCategory(categoria);
 			if (snippletByCategory != null) {
-				for (Snipplet snipplet : snippletByCategory) {
+				for (SnippletDTO snipplet : snippletByCategory) {
 					populatedPanel = new AnchorPane();
 					populatedPanel = snippletHelper.getPopulatedPanel(categoria, snipplet,false);
 					panels.add(populatedPanel);
@@ -131,13 +129,13 @@ public class SnippletService {
 	}
 	
 
-	public List<AnchorPane> loadSnipplets(List<Snipplet> snippletByCategory,String categoria) {
+	public List<AnchorPane> loadSnipplets(List<SnippletDTO> snippletByCategory, String categoria) {
 		AnchorPane populatedPanel = null;
 
 		List<AnchorPane> panels = new ArrayList<AnchorPane>();
 		try {
 			if (snippletByCategory != null) {
-				for (Snipplet snipplet : snippletByCategory) {
+				for (SnippletDTO snipplet : snippletByCategory) {
 					populatedPanel = new AnchorPane();
 					
 					populatedPanel = snippletHelper.getPopulatedPanel(categoria, snipplet,false);
@@ -156,14 +154,14 @@ public class SnippletService {
 	}
 	
 	
-	public List<AnchorPane> loadSnippletsForSearch(List<Snipplet> snippletByCategory){
+	public List<AnchorPane> loadSnippletsForSearch(List<SnippletDTO> snippletByCategory){
 		
 		AnchorPane populatedPanel = null;
 
 		List<AnchorPane> panels = new ArrayList<AnchorPane>();
 		try {
 			if (snippletByCategory != null) {
-				for (Snipplet snipplet : snippletByCategory) {
+				for (SnippletDTO snipplet : snippletByCategory) {
 					populatedPanel = new AnchorPane();
 					snipplet.setNombreCategoria(snipplet.getNombreCategoria());
 					populatedPanel = snippletHelper.getPopulatedPanel(snipplet.getNombreCategoria(), snipplet,true);
@@ -182,7 +180,7 @@ public class SnippletService {
 	}
 	
 
-	private List<Snipplet> getSnippletByCategory(String categoria) {
+	private List<SnippletDTO> getSnippletByCategory(String categoria) {
 
 		for (CategoriaDTO categoriaDTO : categorias) {
 			if (categoriaDTO.getNombre().equals(categoria)) {
@@ -230,7 +228,7 @@ public class SnippletService {
 
 	}
 
-	public void agregarSnipplet(Snipplet snipplet, String categoria) {
+	public void agregarSnipplet(SnippletDTO snipplet, String categoria) {
 		CategoriaDTO categoriaDTO = getCategoriaDTO(categoria);
 		categoriaDTO.setSnipplets(getSnippletByCategory(categoria));
 		categoriaDTO.addSnipplet(snipplet);
@@ -238,10 +236,10 @@ public class SnippletService {
 	}
 	
 	
-	public void snippletRepetido(Snipplet snipplet){
+	public void snippletRepetido(SnippletDTO snipplet){
 		int index =0;
 		boolean flag =  false;
-		List<Snipplet> snipplets = getSnippletByCategory(snipplet.getNombreCategoria());
+		List<SnippletDTO> snipplets = getSnippletByCategory(snipplet.getNombreCategoria());
 		
 		for(int i = 0 ; i < snipplets.size();i++){
 			
@@ -266,12 +264,12 @@ public class SnippletService {
 		
 	}
 	
-	public List<Snipplet> searchInCategory(String palabra,String categoria){
+	public List<SnippletDTO> searchInCategory(String palabra,String categoria){
 		CategoriaDTO categoriaDTO = getCategoriaDTO(categoria);
 		
 		
-		List<Snipplet> snipplets = new ArrayList<Snipplet>();
-		for (Snipplet snip : categoriaDTO.getSnipplets()) {
+		List<SnippletDTO> snipplets = new ArrayList<SnippletDTO>();
+		for (SnippletDTO snip : categoriaDTO.getSnipplets()) {
 			
 			boolean buscarTexto = snip.buscarTexto(palabra);
 			if(buscarTexto)
@@ -284,14 +282,14 @@ public class SnippletService {
 		
 	}
 	
-	public List<Snipplet> searchAll(String palabras){
+	public List<SnippletDTO> searchAll(String palabras){
 		
 		
-		List<Snipplet> snippletsSearch = new LinkedList<Snipplet>();
+		List<SnippletDTO> snippletsSearch = new LinkedList<SnippletDTO>();
 		
-		List<Snipplet> allSnipplets = getAllSnipplets();
+		List<SnippletDTO> allSnipplets = getAllSnipplets();
 		
-		for (Snipplet allSnipplet : allSnipplets) {
+		for (SnippletDTO allSnipplet : allSnipplets) {
 			
 			if(allSnipplet.buscarTexto(palabras)){
 				snippletsSearch.add(allSnipplet);
@@ -307,13 +305,13 @@ public class SnippletService {
 	}
 	
 	
-	public List<Snipplet> getAllSnipplets(){
+	public List<SnippletDTO> getAllSnipplets(){
 		
-		List<Snipplet> snipplets = new LinkedList<Snipplet>();
+		List<SnippletDTO> snipplets = new LinkedList<SnippletDTO>();
 		for (CategoriaDTO categoriaDTO : categorias) {
 			
 			
-			for (Snipplet snipplet : categoriaDTO.getSnipplets()) {
+			for (SnippletDTO snipplet : categoriaDTO.getSnipplets()) {
 				snipplet.setNombreCategoria(categoriaDTO.getNombre());
 				snipplets.add(snipplet);
 				
@@ -417,9 +415,9 @@ public class SnippletService {
 
 	}
 
-	private boolean existeEnLista(String titulo, List<Snipplet> lista) {
+	private boolean existeEnLista(String titulo, List<SnippletDTO> lista) {
 
-		for (Snipplet snip : lista) {
+		for (SnippletDTO snip : lista) {
 
 			if (titulo.equals(snip.getTitulo()))
 				return true;
@@ -437,14 +435,14 @@ public class SnippletService {
 		if (exists) {
 			categoriaLocal = getCategoriaDTO(categoriaDTOFromServer.getNombre());
 
-			List<Snipplet> localSnipplets = categoriaLocal.getSnipplets();
-			List<Snipplet> snippletsfromServer = categoriaDTOFromServer.getSnipplets();
+			List<SnippletDTO> localSnipplets = categoriaLocal.getSnipplets();
+			List<SnippletDTO> snippletsfromServer = categoriaDTOFromServer.getSnipplets();
 			//sfs snipplet from server
-			List<Snipplet> aAgregar = new LinkedList<Snipplet>();
-			for (Snipplet sfs : snippletsfromServer) {
+			List<SnippletDTO> aAgregar = new LinkedList<SnippletDTO>();
+			for (SnippletDTO sfs : snippletsfromServer) {
 				
 				//local snipplet
-				for (Snipplet ls : localSnipplets) {
+				for (SnippletDTO ls : localSnipplets) {
 					if(sfs.getTitulo().equals(ls.getTitulo())){
 						
 						if(!sfs.getContenido().equals(ls.getContenido())){
@@ -462,12 +460,12 @@ public class SnippletService {
 				}
 				
 				if(aAgregar.size() > 0){
-					for (Snipplet snipplet : aAgregar) {
+					for (SnippletDTO snipplet : aAgregar) {
 						
 						deleteSnippletFromList(localSnipplets,snipplet);
 					}
 					
-					for (Snipplet snipplet : aAgregar) {
+					for (SnippletDTO snipplet : aAgregar) {
 						
 						localSnipplets.add(snipplet);
 						
@@ -497,11 +495,11 @@ public class SnippletService {
 
 	}
 
-	private void deleteSnippletFromList(List<Snipplet> localSnipplets, Snipplet victim) {
+	private void deleteSnippletFromList(List<SnippletDTO> localSnipplets, SnippletDTO victim) {
 
 		int cont = 0;
 		int victimNumber = 0;
-		for (Snipplet snipplet : localSnipplets) {
+		for (SnippletDTO snipplet : localSnipplets) {
 			if(snipplet.getTitulo().equals(victim.getTitulo())){
 				victimNumber = cont;
 				
@@ -523,9 +521,9 @@ public class SnippletService {
 
 	private void errorMultiplesGuardados(CategoriaDTO categoriaDTO) {
 
-		List<Snipplet> snipplets = new ArrayList<Snipplet>();
+		List<SnippletDTO> snipplets = new ArrayList<SnippletDTO>();
 
-		for (Snipplet snipplet : categoriaDTO.getSnipplets()) {
+		for (SnippletDTO snipplet : categoriaDTO.getSnipplets()) {
 
 			if (!snipplet.equals(null))
 				snipplets.add(snipplet);
@@ -553,9 +551,9 @@ public class SnippletService {
 
 		CategoriaDTO categoriaDTO = getCategoriaDTO(categoria);
 
-		List<Snipplet> snipplets = categoriaDTO.getSnipplets();
+		List<SnippletDTO> snipplets = categoriaDTO.getSnipplets();
 		cont = 0;
-		for (Snipplet snipplet : snipplets) {
+		for (SnippletDTO snipplet : snipplets) {
 			if (snipplet.getContenido().equals(text)) {
 				break;
 			}

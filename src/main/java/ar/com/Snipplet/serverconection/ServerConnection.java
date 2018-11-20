@@ -1,12 +1,10 @@
 package ar.com.Snipplet.serverconection;
 
-import ar.com.Snipplet.context.SpringContext;
 import ar.com.Snipplet.domain.UserConfiguration;
-import ar.com.Snipplet.dto.CategoriaDTO;
-import ar.com.Snipplet.dto.SendDTO;
 import ar.com.Snipplet.persistencia.Persistencia;
 import ar.com.Snipplet.services.ConfigurationService;
-import ar.com.Snipplet.services.SnippletService;
+import ar.com.commons.send.dto.CategoriaDTO;
+import ar.com.commons.send.dto.SendDTO;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

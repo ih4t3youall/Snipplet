@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 
 import ar.com.Snipplet.domain.FileConfiguration;
 import ar.com.Snipplet.domain.UserConfiguration;
-import ar.com.Snipplet.dto.CategoriaDTO;
+import ar.com.commons.send.dto.CategoriaDTO;
 
 public class Persistencia {
 

@@ -10,10 +10,10 @@ import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
 
 import ar.com.Snipplet.context.SpringContext;
-import ar.com.Snipplet.domain.Snipplet;
-import ar.com.Snipplet.dto.CategoriaDTO;
 import ar.com.Snipplet.helper.SnippletsHelper;
 import ar.com.Snipplet.services.SnippletService;
+import ar.com.commons.send.dto.CategoriaDTO;
+import ar.com.commons.send.dto.SnippletDTO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -310,7 +310,7 @@ public class InicioController implements Initializable {
 		String palabraABuscar = JOptionPane.showInputDialog("Buscar:");
 		if (palabraABuscar != null) {
 			String categoria = fxmlListView.getSelectionModel().getSelectedItem();
-			List<Snipplet> buscarEnCategorias = snippletService.searchAll(palabraABuscar);
+			List<SnippletDTO> buscarEnCategorias = snippletService.searchAll(palabraABuscar);
 			mostrarSnippletsDeBusqueda(buscarEnCategorias, categoria);
 		}
 	}
@@ -334,7 +334,7 @@ public class InicioController implements Initializable {
 
 	}
 
-	private void mostrarSnippletsDeBusqueda(List<Snipplet> snipplets, String categoria) {
+	private void mostrarSnippletsDeBusqueda(List<SnippletDTO> snipplets, String categoria) {
 
 		List<AnchorPane> panels = snippletService.loadSnippletsForSearch(snipplets);
 		int size = vbox.getChildren().size();

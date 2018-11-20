@@ -3,7 +3,7 @@ package ar.com.Snipplet.helper;
 import java.io.IOException;
 
 import ar.com.Snipplet.controllers.PanelController;
-import ar.com.Snipplet.domain.Snipplet;
+import ar.com.commons.send.dto.SnippletDTO;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 
@@ -68,7 +68,7 @@ public class SnippletsHelper {
 	}
 	
 	
-	public  AnchorPane getPopulatedPanel(String categoria,Snipplet snipplet,boolean buscar) throws IOException {
+	public  AnchorPane getPopulatedPanel(String categoria, SnippletDTO snipplet, boolean buscar) throws IOException {
 
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/views/panel.fxml"));
