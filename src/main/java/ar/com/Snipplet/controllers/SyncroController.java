@@ -158,8 +158,8 @@ public class SyncroController implements Initializable {
 
 					for (String string : listar_server) {
 						items.add(string);
-
 					}
+
 					upload.setDisable(true);
 					download.setDisable(false);
 					borrar.setDisable(true);
@@ -182,7 +182,6 @@ public class SyncroController implements Initializable {
 				removerItemsLista();
 				try {
 					listar_server = listar_server();
-
 					for (String string : listar_server) {
 						items.add(string);
 
@@ -209,7 +208,6 @@ public class SyncroController implements Initializable {
 					borrarFromServer(categoria);
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(null, "error al elinimar la categoria");
-					
 					e.printStackTrace();
 				}
 
@@ -229,8 +227,7 @@ public class SyncroController implements Initializable {
 		send.setUsername(userConfiguration.getUsername());
 		send.setPassword(userConfiguration.getPassword());
 		send.setCategoriaDTO(categoriaDTO);
-		
-		
+
 		MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
 		OkHttpClient client = new OkHttpClient();
@@ -244,8 +241,6 @@ public class SyncroController implements Initializable {
 
 		String responseBody = response.body().string();
 
-		
-		
 	}
 
 	public CategoriaDTO getFromServer(String filename)
@@ -309,7 +304,6 @@ public class SyncroController implements Initializable {
 		} else {
 			JOptionPane.showMessageDialog(null, "Este archivo no contiene snipplets!");
 			return "";
-
 		}
 	}
 

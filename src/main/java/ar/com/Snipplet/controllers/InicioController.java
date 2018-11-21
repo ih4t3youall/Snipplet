@@ -1,19 +1,25 @@
 package ar.com.Snipplet.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 import ar.com.Snipplet.context.SpringContext;
 import ar.com.Snipplet.helper.SnippletsHelper;
+import ar.com.Snipplet.services.ConfigurationService;
 import ar.com.Snipplet.services.SnippletService;
 import ar.com.commons.send.dto.CategoriaDTO;
 import ar.com.commons.send.dto.SnippletDTO;
+import ar.com.commons.send.socket.Client;
+import ar.com.commons.send.socket.Server;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -63,6 +69,8 @@ public class InicioController implements Initializable {
 	@FXML
 	private Menu fxmlEdit;
 
+	private boolean estadoServidor = false;
+
 	private String id;
 
 	private VBox vbox = (VBox) SpringContext.getContext().getBean("vbox");
@@ -70,6 +78,9 @@ public class InicioController implements Initializable {
 	private SnippletService snippletService = (SnippletService) SpringContext.getContext().getBean("snippletService");
 
 	private SnippletsHelper snippletHelper = (SnippletsHelper) SpringContext.getContext().getBean("snippletHelper");
+
+	private ConfigurationService configurationService = (ConfigurationService) SpringContext.getContext().getBean("configurationService");
+	private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	protected ObservableList<String> items;
 
@@ -114,7 +125,7 @@ public class InicioController implements Initializable {
 		}
 
 	}
-	
+
 
 	public void requestFocus() {
 		fxmlListView.requestFocus();
@@ -191,10 +202,14 @@ public class InicioController implements Initializable {
 		MenuItem agregarCategoria = new MenuItem("Agregar Categoria");
 		MenuItem guardarEnLaNube = new MenuItem("Administrar nube");
 		MenuItem configuracion = new MenuItem("Configuracion");
+		MenuItem enviarAlServidor = new MenuItem("EnviarAlServidor");
+		MenuItem iniciarServidor = new MenuItem("Iniciar Servidor");
 
 		fxmlMenu.getItems().add(agregarCategoria);
 		fxmlMenu.getItems().add(guardarEnLaNube);
 		fxmlMenu.getItems().add(configuracion);
+		fxmlMenu.getItems().add(enviarAlServidor);
+		fxmlMenu.getItems().add(iniciarServidor );
 
 		configuracion.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -302,9 +317,51 @@ public class InicioController implements Initializable {
 
 			}
 		});
+		enviarAlServidor.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
 
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+
+				String url = JOptionPane.showInputDialog(null, "url del server");
+
+				if (url != null) {
+
+					int result = fileChooser.showOpenDialog(null);
+					if (result == 0) {
+						String selectedFile = fileChooser.getSelectedFile().toString();
+						System.out.println(selectedFile);
+						Client client = new Client(selectedFile, url);
+						Thread thread = new Thread(client);
+						thread.start();
+
+					}
+				}else{
+					JOptionPane.showMessageDialog(null,"url invalida");
+				}
+			}
+		});
+
+		iniciarServidor.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+			   if(estadoServidor){
+			       executor.shutdownNow();
+
+			   }else{
+				   String directory = configurationService.getPrefix()+"../snippletDownloads";
+
+				   Server server = new Server(directory);
+				   //TODO aca tengo que ver como hago para que el directorio sea configurable
+				   //configurationService.getFileConfiguration();
+				   executor.submit(server);
+				   estadoServidor = true;
+			   }
+}
+									 }
+		);
 	}
-
 	// es public porque tambien accede desde el keylistener
 	public void search() {
 		String palabraABuscar = JOptionPane.showInputDialog("Buscar:");
@@ -375,31 +432,31 @@ public class InicioController implements Initializable {
 		String palabraABuscar = JOptionPane.showInputDialog("Buscar:");
 		List<CategoriaDTO> categoriasBuscadas = new LinkedList<CategoriaDTO>();
 		if (palabraABuscar != null) {
-			
+
 			List<CategoriaDTO> categorias = snippletService.getCategorias();
-			
+
 			StringTokenizer st = new StringTokenizer(palabraABuscar);
-			
+
 			while(st.hasMoreTokens()){
-				
+
 				String nextToken = st.nextToken();
-				
+
 				for (CategoriaDTO categoriaDTO : categorias) {
 					if(categoriaDTO.getNombre().trim().toLowerCase().indexOf(nextToken.toLowerCase()) != -1){
 						categoriasBuscadas.add(categoriaDTO);
-						
+
 					}
 				}
-				
-				
+
+
 			}
-			
-			
+
+
 			updateList(categoriasBuscadas);
-			
-			
+
+
 		}
-		
+
 
 	}
 

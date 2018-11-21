@@ -36,11 +36,9 @@ public class Main extends Application {
             System.out.println("Snipplet version 1.4");
             InputStream resourceAsStream = getClass().getResourceAsStream("../resources/icono.png");
             if(resourceAsStream != null){
-            primaryStage.getIcons().add(new Image(resourceAsStream));
-            }
-            
-           
-            
+				primaryStage.getIcons().add(new Image(resourceAsStream));
+			}
+
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
@@ -48,14 +46,14 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
-		
+
 	}
-	
-	
-	
-	
+
+
+
+
 
 }
