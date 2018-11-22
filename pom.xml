@@ -42,13 +42,11 @@
 			<version>${snipplet.commons}</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
 			<version>3.2.0</version>
 		</dependency>
-
 
 		<dependency> <!-- only on client side -->
 			<groupId>com.sun.jersey</groupId>
@@ -74,8 +72,6 @@
 			<version>4.0-alpha3</version>
 		</dependency>
 
-
-
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
@@ -93,6 +89,7 @@
 			<artifactId>httpclient</artifactId>
 			<version>4.3.6</version>
 		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
