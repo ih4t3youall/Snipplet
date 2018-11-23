@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane fx:controller="ar.com.Snipplet.controllers.ControllerPrueba" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField fx:id="ip" layoutX="45.0" layoutY="37.0" prefHeight="25.0" prefWidth="255.0" />
+      <Label layoutX="45.0" layoutY="20.0" text="ip destinatario" />
+      <Button fx:id="enviar" layoutX="45.0" layoutY="312.0" mnemonicParsing="false" text="Enviar" />
+      <TextArea fx:id="mensaje" layoutX="45.0" layoutY="100.0" prefHeight="200.0" prefWidth="468.0" />
+      <Label layoutX="45.0" layoutY="71.0" prefHeight="17.0" prefWidth="120.0" text="Mensaje" />
+   </children>
+</AnchorPane>

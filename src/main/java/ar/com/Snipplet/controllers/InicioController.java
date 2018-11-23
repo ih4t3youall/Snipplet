@@ -120,7 +120,6 @@ public class InicioController implements Initializable {
 		snippletService.cargarArchivos();
 		removerItemsLista();
 		for (CategoriaDTO categoria : categoriasDTO) {
-
 			items.add(categoria.getNombre());
 		}
 
@@ -204,12 +203,35 @@ public class InicioController implements Initializable {
 		MenuItem configuracion = new MenuItem("Configuracion");
 		MenuItem enviarAlServidor = new MenuItem("EnviarAlServidor");
 		MenuItem iniciarServidor = new MenuItem("Iniciar Servidor");
+		MenuItem enviarMensaje = new MenuItem("Enviar Mensaje");
 
 		fxmlMenu.getItems().add(agregarCategoria);
 		fxmlMenu.getItems().add(guardarEnLaNube);
 		fxmlMenu.getItems().add(configuracion);
 		fxmlMenu.getItems().add(enviarAlServidor);
-		fxmlMenu.getItems().add(iniciarServidor );
+		fxmlMenu.getItems().add(iniciarServidor);
+		fxmlMenu.getItems().add(enviarMensaje);
+
+		enviarMensaje.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				FXMLLoader loader = new FXMLLoader ();
+				Stage secondaryStage = new Stage();
+				loader.setLocation(getClass().getResource("/views/PanelEnviarMensaje.fxml"));
+				AnchorPane root;
+				try {
+					root  = (AnchorPane) loader.load();
+					Scene scene = new Scene(root);
+					secondaryStage.setResizable(false);
+					secondaryStage.setTitle("Enviar Mensaje");
+					secondaryStage.setScene(scene);
+					secondaryStage.show();
+
+				}catch (Exception e){
+					e.printStackTrace();
+				}
+			}
+		});
 
 		configuracion.setOnAction(new EventHandler<ActionEvent>() {
 

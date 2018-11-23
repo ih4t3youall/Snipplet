@@ -6,6 +6,9 @@
 
 <bean id="persistencia" class="ar.com.Snipplet.persistencia.Persistencia">
 </bean>
+	<bean id="ipService" class="ar.com.commons.send.services.IpService">
+
+	</bean>
 	
 <bean id="snippletHelper" class="ar.com.Snipplet.helper.SnippletsHelper">
 
@@ -30,6 +33,7 @@
 <property name="vbox" ref="vbox"></property>
 <property name="configurationService" ref="configurationService"></property>
 </bean>
+    <bean id="messageService" class="ar.com.Snipplet.services.MessageService"></bean>
 
 
 
