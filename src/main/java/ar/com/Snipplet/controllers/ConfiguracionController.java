@@ -33,12 +33,18 @@ public class ConfiguracionController implements Initializable{
 	
 	@FXML
 	private Button botonNombre;
+
+	@FXML
+	private Button botonDownloads;
 	
 	@FXML
 	private TextField textoNombre;
 	
 	@FXML
 	private TextField textoPassword;
+
+	@FXML
+	private TextField textoDownloads;
 	
 	private ConfigurationService configurationService = (ConfigurationService) SpringContext.getContext().getBean("configurationService");
 	
@@ -49,12 +55,8 @@ public class ConfiguracionController implements Initializable{
 	
 		cargarCampos();
 		inicializarBotones();
-		
-		
-		
-		
-		
-		
+
+
 	}
 
 	private void cargarCampos() {
@@ -73,6 +75,12 @@ public class ConfiguracionController implements Initializable{
 	}
 
 	private void inicializarBotones() {
+		botonDownloads.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				JOptionPane.showMessageDialog(null,"mensaje");
+			}
+		});
 		
 		
 		botonNombre.setOnAction(new EventHandler<ActionEvent>() {
