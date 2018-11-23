@@ -38,8 +38,8 @@ public class Main extends Application {
 			scene.setOnKeyPressed(new InicioKeyHandler(controller));
 
             primaryStage.setResizable(false);
-            primaryStage.setTitle("Snipplet! v1.4");
-            System.out.println("Snipplet version 1.4");
+            primaryStage.setTitle("Snipplet! v1.5");
+            System.out.println("Snipplet version 1.5");
 			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent t) {

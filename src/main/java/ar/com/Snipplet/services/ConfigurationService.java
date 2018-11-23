@@ -1,12 +1,15 @@
 package ar.com.Snipplet.services;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import ar.com.Snipplet.domain.FileConfiguration;
 import ar.com.Snipplet.domain.UserConfiguration;
 import ar.com.Snipplet.persistencia.Persistencia;
+import ar.com.commons.send.airdrop.Pc;
 
 public class ConfigurationService {
 
@@ -22,6 +25,15 @@ public class ConfigurationService {
 
 	}
 
+	public void guardarIp(List<Pc> ips) {
+
+		persistencia.guardarIp(ips);
+	}
+
+	public List<Pc> getIps(){
+		return persistencia.getIps();
+	}
+
 	public String getPrefix() {
 
 		return fileConfiguration.getPrefix();
@@ -34,6 +46,12 @@ public class ConfigurationService {
 
 		this.userConfiguration = userConfig;
 		this.fileConfiguration = config;
+
+	}
+
+	public void cargarConfiguracionIp(){
+
+
 
 	}
 

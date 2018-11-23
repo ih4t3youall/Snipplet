@@ -1,24 +1,25 @@
 package ar.com.Snipplet.persistencia;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import ar.com.Snipplet.domain.FileConfiguration;
 import ar.com.Snipplet.domain.UserConfiguration;
+import ar.com.commons.send.airdrop.Pc;
 import ar.com.commons.send.dto.CategoriaDTO;
 
 public class Persistencia {
 
 	private String prefix;
 	private String prefixConf;
+	private String prefixIps;
 	private String userConfigurationFix;
 	private String uri = "example:uri";
 	private String sistemaOperativo;
@@ -44,6 +45,7 @@ public class Persistencia {
 		exists = new File(userHome + "/Snipplet").exists();
 		prefix = userHome + "Snipplet/";
 		prefixConf = userHome + "SnippletConfig/snipletConf";
+		prefixIps = userHome + "SnippletConfig/snipletIps";
 		userConfigurationFix = userHome + "SnippletConfig/userConfiguration";
 
 		if (!exists) {
@@ -90,6 +92,47 @@ public class Persistencia {
 		oos.close();
 		os.close();
 
+	}
+	public List<Pc> getIps() {
+		File file = new File(prefixIps);
+		if(!file.exists())
+			return null;
+		FileInputStream in = null;
+		List<Pc> ips=null;
+		try {
+
+			in = new FileInputStream(file);
+			@SuppressWarnings("resource")
+			ObjectInputStream ois = new ObjectInputStream(in);
+			ips = (ArrayList<Pc>) ois.readObject();
+			ois.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return ips;
+	}
+
+	public void guardarIp(List<Pc> ips) {
+
+		File file;
+		file = new File(prefixIps);
+		file.delete();
+
+		try {
+			file.createNewFile();
+			FileOutputStream os = new FileOutputStream(file);
+			ObjectOutputStream oos = new ObjectOutputStream(os);
+			oos.writeObject(ips);
+			oos.close();
+			os.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void saveNewUserConfiguration(UserConfiguration userConfiguration) throws IOException {
@@ -241,7 +284,7 @@ public class Persistencia {
 	public void eliminarYCrearArchivo(String filename) throws IOException {
 		File file = new File(prefix + filename);
 		if(file.exists())
-		file.delete();
+			file.delete();
 		file.createNewFile();
 	}
 

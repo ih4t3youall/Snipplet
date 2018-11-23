@@ -10,9 +10,11 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 
+import ar.com.commons.send.airdrop.Pc;
 import ar.com.commons.send.dto.CategoriaDTO;
 
 import ar.com.Snipplet.domain.SourceObject;
@@ -37,9 +39,41 @@ public class SnippletService {
 
 	private VBox vbox;
 
+	List<Pc> ips = new ArrayList<Pc>();
+
 	public SnippletService() {
 		categorias = new ArrayList<CategoriaDTO>();
 	}
+
+	public void updateIp(Pc pcCombo) {
+		for(Pc pc :ips){
+			if (pc.getNombreEquipo().equals(pcCombo.getNombreEquipo())){
+				pc.setNombreEquipo(pcCombo.getNombreEquipo());
+				break;
+			}
+		}
+		configurationService.guardarIp(ips);
+
+
+	}
+
+	public void addIp(Pc ip){
+		if (ips == null){
+			ips = new ArrayList<Pc>();
+		}
+		ips.add(ip);
+		configurationService.guardarIp(ips);
+	}
+
+	public void borrarIp(Pc pc){
+		List<Pc> collect = ips.stream().filter(x -> !(x.getNombreEquipo().equals(pc.getNombreEquipo()))).collect(Collectors.toList());
+		configurationService.guardarIp(collect);
+	}
+	public List<Pc> getIp(){
+		ips = configurationService.getIps();
+		return ips;
+	}
+
 
 	public void firstTime() {
 
@@ -600,7 +634,6 @@ public class SnippletService {
 		persistencia.createFolder(newPrefix);
 		
 	}
-
 
 
 }
