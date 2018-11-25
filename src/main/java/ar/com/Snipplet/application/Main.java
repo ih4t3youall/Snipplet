@@ -1,10 +1,14 @@
 package ar.com.Snipplet.application;
 
 import java.io.InputStream;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import ar.com.Snipplet.controllers.InicioController;
 import ar.com.Snipplet.handlers.MessageReceiverHandler;
 import ar.com.Snipplet.listeners.InicioKeyHandler;
+import ar.com.Snipplet.threads.UpdateIp;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -26,6 +30,7 @@ public class Main extends Application {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource("/views/Inicio.fxml"));
+			startPingServer();
 			
 			root = (Pane) loader.load();
 			InicioController controller = loader.getController();
@@ -58,6 +63,16 @@ public class Main extends Application {
 
 			e.printStackTrace();
 		}
+	}
+
+	private void startPingServer() {
+		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+
+		Runnable task = new UpdateIp();
+
+		int initialDelay = 0;
+		int period = 1;
+		executor.scheduleAtFixedRate(task, initialDelay, period, TimeUnit.SECONDS);
 	}
 
 	public static void main(String[] args) {
