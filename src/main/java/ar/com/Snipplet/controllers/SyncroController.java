@@ -299,7 +299,12 @@ public class SyncroController implements Initializable {
 			okhttp3.Response response = client.newCall(request).execute();
 
 			String responseBody = response.body().string();
-			JOptionPane.showMessageDialog(null, responseBody);
+			SendDTO sendDTO = mapper.readValue(responseBody,SendDTO.class);
+			//falta eliminar
+			snippletService.deleteCategory(sendDTO.getCategoriaDTO().getNombre());
+			snippletService.eliminarCategoriaDeCache(sendDTO.getCategoriaDTO().getNombre());
+			//snippletService.
+			snippletService.actualizarCategoria(sendDTO.getCategoriaDTO());
 			return responseBody;
 		} else {
 			JOptionPane.showMessageDialog(null, "Este archivo no contiene snipplets!");

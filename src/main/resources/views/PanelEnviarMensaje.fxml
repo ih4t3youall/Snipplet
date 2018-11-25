@@ -8,7 +8,7 @@
    <children>
       <TextField fx:id="ip" layoutX="45.0" layoutY="85.0" prefHeight="25.0" prefWidth="255.0" />
       <Label layoutX="45.0" layoutY="62.0" text="ip destinatario" />
-      <Button fx:id="enviar" layoutX="45.0" layoutY="361.0" mnemonicParsing="false" text="Enviar" />
+      <Button fx:id="enviar" layoutX="45.0" layoutY="361.0" mnemonicParsing="false" text="Enviar Mensaje" />
       <TextArea fx:id="mensaje" layoutX="45.0" layoutY="194.0" prefHeight="167.0" prefWidth="468.0" />
       <Label layoutX="45.0" layoutY="110.0" prefHeight="17.0" prefWidth="120.0" text="Mensaje" />
       <ComboBox fx:id="comboIps" layoutX="309.0" layoutY="37.0" prefHeight="25.0" prefWidth="205.0" />
@@ -16,5 +16,6 @@
       <Label layoutX="45.0" layoutY="14.0" text="Nombre Pc" />
       <Button fx:id="guardar" layoutX="46.0" layoutY="127.0" mnemonicParsing="false" text="Guardar" />
       <Button fx:id="borrar" layoutX="309.0" layoutY="85.0" mnemonicParsing="false" text="Borrar" />
+      <Button fx:id="enviarArchivo" layoutX="165.0" layoutY="361.0" mnemonicParsing="false" text="EnviarArchivo" />
    </children>
 </AnchorPane>

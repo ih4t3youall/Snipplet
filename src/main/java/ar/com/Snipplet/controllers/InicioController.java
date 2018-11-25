@@ -18,7 +18,6 @@ import ar.com.Snipplet.services.ConfigurationService;
 import ar.com.Snipplet.services.SnippletService;
 import ar.com.commons.send.dto.CategoriaDTO;
 import ar.com.commons.send.dto.SnippletDTO;
-import ar.com.commons.send.socket.Client;
 import ar.com.commons.send.socket.Server;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -38,7 +37,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import sun.util.locale.StringTokenIterator;
 
 public class InicioController implements Initializable {
 
@@ -190,6 +188,7 @@ public class InicioController implements Initializable {
 				items.remove(nombreCategoria);
 				snippletService.deleteCategory(nombreCategoria);
 
+
 			}
 
 		});
@@ -201,14 +200,14 @@ public class InicioController implements Initializable {
 		MenuItem agregarCategoria = new MenuItem("Agregar Categoria");
 		MenuItem guardarEnLaNube = new MenuItem("Administrar nube");
 		MenuItem configuracion = new MenuItem("Configuracion");
-		MenuItem enviarAlServidor = new MenuItem("EnviarAlServidor");
+		//MenuItem enviarAlServidor = new MenuItem("EnviarAlServidor");
 		MenuItem iniciarServidor = new MenuItem("Iniciar Servidor");
 		MenuItem enviarMensaje = new MenuItem("Enviar Mensaje");
 
 		fxmlMenu.getItems().add(agregarCategoria);
 		fxmlMenu.getItems().add(guardarEnLaNube);
 		fxmlMenu.getItems().add(configuracion);
-		fxmlMenu.getItems().add(enviarAlServidor);
+		//fxmlMenu.getItems().add(enviarAlServidor);
 		fxmlMenu.getItems().add(iniciarServidor);
 		fxmlMenu.getItems().add(enviarMensaje);
 
@@ -339,31 +338,31 @@ public class InicioController implements Initializable {
 
 			}
 		});
-		enviarAlServidor.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-
-				String url = JOptionPane.showInputDialog(null, "url del server");
-
-				if (url != null) {
-
-					int result = fileChooser.showOpenDialog(null);
-					if (result == 0) {
-						String selectedFile = fileChooser.getSelectedFile().toString();
-						System.out.println(selectedFile);
-						Client client = new Client(selectedFile, url);
-						Thread thread = new Thread(client);
-						thread.start();
-
-					}
-				}else{
-					JOptionPane.showMessageDialog(null,"url invalida");
-				}
-			}
-		});
+//		enviarAlServidor.setOnAction(new EventHandler<ActionEvent>() {
+//			@Override
+//			public void handle(ActionEvent event) {
+//
+//				JFileChooser fileChooser = new JFileChooser();
+//				fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+//
+//				String url = JOptionPane.showInputDialog(null, "url del server");
+//
+//				if (url != null) {
+//
+//					int result = fileChooser.showOpenDialog(null);
+//					if (result == 0) {
+//						String selectedFile = fileChooser.getSelectedFile().toString();
+//						System.out.println(selectedFile);
+//						Client client = new Client(selectedFile, url);
+//						Thread thread = new Thread(client);
+//						thread.start();
+//
+//					}
+//				}else{
+//					JOptionPane.showMessageDialog(null,"url invalida");
+//				}
+//			}
+//		});
 
 		iniciarServidor.setOnAction(new EventHandler<ActionEvent>() {
 			@Override

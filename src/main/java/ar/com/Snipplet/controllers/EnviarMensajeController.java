@@ -6,6 +6,7 @@ import ar.com.Snipplet.services.SnippletService;
 import ar.com.commons.send.airdrop.Mensaje;
 import ar.com.commons.send.airdrop.Pc;
 import ar.com.commons.send.services.IpService;
+import ar.com.commons.send.socket.Client;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.InputMethodEvent;
 
 import javax.swing.*;
+import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -43,6 +45,9 @@ public class EnviarMensajeController implements Initializable {
     @FXML
     private Button borrar;
 
+    @FXML
+    private Button enviarArchivo;
+
     private MessageService messageService = (MessageService) SpringContext.getContext().getBean("messageService");
     private IpService ipService= (IpService ) SpringContext.getContext().getBean("ipService");
     private SnippletService snippletService  = (SnippletService) SpringContext.getContext().getBean("snippletService");
@@ -67,6 +72,32 @@ public class EnviarMensajeController implements Initializable {
             //comboIps.getItems().addAll(ips);
             comboIps.getItems().addAll(ips);
         }
+
+        enviarArchivo.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+
+                String url = JOptionPane.showInputDialog(null, "url del server");
+                Pc pc = (Pc)comboIps.getSelectionModel().getSelectedItem();
+
+                if (pc.getIp() != null) {
+
+                    int result = fileChooser.showOpenDialog(null);
+                    if (result == 0) {
+                        String selectedFile = fileChooser.getSelectedFile().toString();
+                        System.out.println(selectedFile);
+                        Client client = new Client(selectedFile, pc.getIp());
+                        Thread thread = new Thread(client);
+                        thread.start();
+
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null,"url invalida");
+                }
+            }
+        });
 
         guardar.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -119,7 +150,6 @@ public class EnviarMensajeController implements Initializable {
                     men.setMensaje(mensaje.getText());
                     men.setComando("mensajePrompt");
                     messageService.sendMessage(men);
-                    snippletService.addIp(pc);
 
                 }
 
