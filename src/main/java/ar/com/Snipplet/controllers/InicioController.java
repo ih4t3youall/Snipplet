@@ -13,8 +13,10 @@ import java.util.concurrent.Executors;
 import javax.swing.*;
 
 import ar.com.Snipplet.context.SpringContext;
+import ar.com.Snipplet.handlers.MessageReceiverHandler;
 import ar.com.Snipplet.helper.SnippletsHelper;
 import ar.com.Snipplet.services.ConfigurationService;
+import ar.com.Snipplet.services.PingIpService;
 import ar.com.Snipplet.services.SnippletService;
 import ar.com.commons.send.dto.CategoriaDTO;
 import ar.com.commons.send.dto.SnippletDTO;
@@ -75,6 +77,8 @@ public class InicioController implements Initializable {
 
 	private SnippletService snippletService = (SnippletService) SpringContext.getContext().getBean("snippletService");
 
+	private PingIpService pingIpService = (PingIpService ) SpringContext.getContext().getBean("pingIpService");
+
 	private SnippletsHelper snippletHelper = (SnippletsHelper) SpringContext.getContext().getBean("snippletHelper");
 
 	private ConfigurationService configurationService = (ConfigurationService) SpringContext.getContext().getBean("configurationService");
@@ -83,7 +87,6 @@ public class InicioController implements Initializable {
 	protected ObservableList<String> items;
 
 	private Stage stage;
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		System.out.println("Started up!");
@@ -91,8 +94,11 @@ public class InicioController implements Initializable {
 		configure();
 		items = FXCollections.observableArrayList();
 		fxmlListView.setItems(items);
+		pingIpService.startPing();
 
 		refreshList();
+		//inicializo el message receiver
+		new Thread(new MessageReceiverHandler(this)).start();
 
 		fxmlListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -200,16 +206,17 @@ public class InicioController implements Initializable {
 		MenuItem agregarCategoria = new MenuItem("Agregar Categoria");
 		MenuItem guardarEnLaNube = new MenuItem("Administrar nube");
 		MenuItem configuracion = new MenuItem("Configuracion");
-		//MenuItem enviarAlServidor = new MenuItem("EnviarAlServidor");
 		MenuItem iniciarServidor = new MenuItem("Iniciar Servidor");
 		MenuItem enviarMensaje = new MenuItem("Enviar Mensaje");
+
 
 		fxmlMenu.getItems().add(agregarCategoria);
 		fxmlMenu.getItems().add(guardarEnLaNube);
 		fxmlMenu.getItems().add(configuracion);
-		//fxmlMenu.getItems().add(enviarAlServidor);
 		fxmlMenu.getItems().add(iniciarServidor);
 		fxmlMenu.getItems().add(enviarMensaje);
+
+
 
 		enviarMensaje.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -338,31 +345,6 @@ public class InicioController implements Initializable {
 
 			}
 		});
-//		enviarAlServidor.setOnAction(new EventHandler<ActionEvent>() {
-//			@Override
-//			public void handle(ActionEvent event) {
-//
-//				JFileChooser fileChooser = new JFileChooser();
-//				fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-//
-//				String url = JOptionPane.showInputDialog(null, "url del server");
-//
-//				if (url != null) {
-//
-//					int result = fileChooser.showOpenDialog(null);
-//					if (result == 0) {
-//						String selectedFile = fileChooser.getSelectedFile().toString();
-//						System.out.println(selectedFile);
-//						Client client = new Client(selectedFile, url);
-//						Thread thread = new Thread(client);
-//						thread.start();
-//
-//					}
-//				}else{
-//					JOptionPane.showMessageDialog(null,"url invalida");
-//				}
-//			}
-//		});
 
 		iniciarServidor.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -480,5 +462,10 @@ public class InicioController implements Initializable {
 
 
 	}
+
+	public void setPingIpService(PingIpService pingIpService) {
+		this.pingIpService = pingIpService;
+	}
+
 
 }

@@ -30,12 +30,9 @@ public class Main extends Application {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource("/views/Inicio.fxml"));
-			startPingServer();
-			
+
 			root = (Pane) loader.load();
 			InicioController controller = loader.getController();
-			//inicializo el message receiver
-            new Thread(new MessageReceiverHandler()).start();
 
 			controller.setListener(primaryStage);
 			
@@ -65,15 +62,7 @@ public class Main extends Application {
 		}
 	}
 
-	private void startPingServer() {
-		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
-		Runnable task = new UpdateIp();
-
-		int initialDelay = 0;
-		int period = 1;
-		executor.scheduleAtFixedRate(task, initialDelay, period, TimeUnit.SECONDS);
-	}
 
 	public static void main(String[] args) {
 		launch(args);

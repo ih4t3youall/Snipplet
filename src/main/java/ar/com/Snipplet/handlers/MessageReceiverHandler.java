@@ -1,11 +1,17 @@
 package ar.com.Snipplet.handlers;
 
 import ar.com.Snipplet.context.SpringContext;
+import ar.com.Snipplet.controllers.InicioController;
 import ar.com.Snipplet.services.MessageService;
+import ar.com.Snipplet.views.VistaRecibirMensajePrompt;
 import ar.com.commons.send.airdrop.Constantes;
 import ar.com.commons.send.airdrop.Mensaje;
 import ar.com.commons.send.airdrop.Pc;
 import ar.com.commons.send.services.IpService;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import javax.swing.*;
 import java.io.*;
@@ -14,6 +20,11 @@ import java.net.Socket;
 
 public class MessageReceiverHandler implements Runnable{
 
+    private InicioController inicioController;
+    public MessageReceiverHandler(InicioController inicioController){
+
+        this.inicioController = inicioController;
+    }
 
 
     private IpService ipService = (IpService) SpringContext.getContext().getBean("ipService");
@@ -62,12 +73,16 @@ public class MessageReceiverHandler implements Runnable{
 
                 if (mensaje.getComando().equals("mensajePrompt")) {
 
-                    System.out.println(mensaje.getMensaje());
+
+                    new VistaRecibirMensajePrompt(mensaje);
+
+
 
                     }
 
 
             } catch (Exception e) {
+                e.printStackTrace();
 
                 String error = "Error con el serversocket en el puerto : "
                         + Constantes.PUERTO;

@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import ar.com.Snipplet.context.SpringContext;
 import ar.com.Snipplet.domain.UserConfiguration;
 import ar.com.Snipplet.services.ConfigurationService;
+import ar.com.Snipplet.services.PingIpService;
 import ar.com.Snipplet.services.SnippletService;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -49,7 +50,8 @@ public class ConfiguracionController implements Initializable{
 	private ConfigurationService configurationService = (ConfigurationService) SpringContext.getContext().getBean("configurationService");
 	
 	private SnippletService snippletService = (SnippletService) SpringContext.getContext().getBean("snippletService");
-	
+	private PingIpService pingIpService = (PingIpService) SpringContext.getContext().getBean("pingIpService");
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 	
@@ -108,8 +110,8 @@ public class ConfiguracionController implements Initializable{
 		public void handle(ActionEvent event) {
 			
 			String nuevoHost = textHost.getText();
-			
 			configurationService.cambiarHost(nuevoHost);
+			pingIpService.changeAddresAndRestart(nuevoHost);
 			JOptionPane.showMessageDialog(null, "Actualizado con exito.");
 			
 		}

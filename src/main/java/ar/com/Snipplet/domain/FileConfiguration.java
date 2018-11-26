@@ -13,6 +13,7 @@ public class FileConfiguration implements Serializable {
 	private String username;
 	private String password;
 	private String configurationPrefix;
+	private String ipPingServer;
 
 	public String getPrefix() {
 		return prefix;
@@ -58,4 +59,11 @@ public class FileConfiguration implements Serializable {
 		this.password = password;
 	}
 
+	public String getIpPingServer() {
+		return ipPingServer;
+	}
+
+	public void setIpPingServer(String ipPingServer) {
+		this.ipPingServer = ipPingServer;
+	}
 }
