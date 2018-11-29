@@ -63,6 +63,8 @@ public class SyncroController implements Initializable {
 
 	private Scene scene;
 
+	private InicioController inicioController;
+
 	public void setScene(Scene scene) {
 		this.scene = scene;
 
@@ -305,6 +307,7 @@ public class SyncroController implements Initializable {
 			snippletService.eliminarCategoriaDeCache(sendDTO.getCategoriaDTO().getNombre());
 			//snippletService.
 			snippletService.actualizarCategoria(sendDTO.getCategoriaDTO());
+			inicioController.refreshList();
 			return responseBody;
 		} else {
 			JOptionPane.showMessageDialog(null, "Este archivo no contiene snipplets!");
@@ -350,4 +353,7 @@ public class SyncroController implements Initializable {
 
 	}
 
+	public void setInicioController(InicioController inicioController) {
+		this.inicioController = inicioController;
+	}
 }

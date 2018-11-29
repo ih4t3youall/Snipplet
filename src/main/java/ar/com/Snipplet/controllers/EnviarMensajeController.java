@@ -79,7 +79,6 @@ public class EnviarMensajeController implements Initializable {
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 
-                String url = JOptionPane.showInputDialog(null, "url del server");
                 Pc pc = (Pc)comboIps.getSelectionModel().getSelectedItem();
 
                 if (pc.getIp() != null) {

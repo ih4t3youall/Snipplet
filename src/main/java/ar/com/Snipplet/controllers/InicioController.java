@@ -146,7 +146,7 @@ public class InicioController implements Initializable {
 
 	}
 
-	public void configure() {
+	private void configure() {
 
 		crearMenuItems();
 		crearBotones();
@@ -185,17 +185,12 @@ public class InicioController implements Initializable {
 			}
 		});
 
-		botonMenos.setOnAction(new EventHandler<ActionEvent>() {
+		botonMenos.setOnAction(event -> {
 
-			@Override
-			public void handle(ActionEvent event) {
+			String nombreCategoria = fxmlListView.getSelectionModel().getSelectedItem();
+			items.remove(nombreCategoria);
+			snippletService.deleteCategory(nombreCategoria);
 
-				String nombreCategoria = fxmlListView.getSelectionModel().getSelectedItem();
-				items.remove(nombreCategoria);
-				snippletService.deleteCategory(nombreCategoria);
-
-
-			}
 
 		});
 
@@ -265,6 +260,7 @@ public class InicioController implements Initializable {
 			}
 		});
 
+		final InicioController inicioController= this;
 		guardarEnLaNube.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -277,6 +273,7 @@ public class InicioController implements Initializable {
 				try {
 					root = (AnchorPane) loader.load();
 					SyncroController controller = (SyncroController) loader.getController();
+					controller.setInicioController(inicioController);
 					Scene scene = new Scene(root);
 					controller.setScene(scene);
 
