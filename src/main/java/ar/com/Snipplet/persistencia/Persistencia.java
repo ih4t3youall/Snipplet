@@ -79,6 +79,9 @@ public class Persistencia {
 		}
 
 	}
+	public String getHomeDirectory(){
+		return userHome;
+	}
 
 	public void saveNewConfiguration(FileConfiguration fileConfiguration) throws IOException {
 		File file;

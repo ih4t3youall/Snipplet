@@ -54,6 +54,9 @@ public class ConfigurationService {
 
 
 	}
+	public String getHomeDirectory(){
+		return persistencia.getHomeDirectory();
+	}
 
 	public FileConfiguration getFileConfiguration() {
 		return fileConfiguration;

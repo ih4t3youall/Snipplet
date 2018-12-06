@@ -350,7 +350,7 @@ public class InicioController implements Initializable {
 			       executor.shutdownNow();
 
 			   }else{
-				   String directory = configurationService.getPrefix()+"../snippletDownloads";
+				   String directory = configurationService.getHomeDirectory()+"/Downloads";
 
 				   Server server = new Server(directory);
 				   //TODO aca tengo que ver como hago para que el directorio sea configurable
